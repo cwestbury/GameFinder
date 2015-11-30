@@ -9,14 +9,20 @@
 import UIKit
 import CoreLocation
 import ParseUI
+import Parse
 import MapKit
 
 
-class AddGameViewController: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate {
+class AddGameViewController: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate, UISearchBarDelegate {
    
     //MARK: - Properties
     var locManager = LocationManager.sharedInstance
+    var newGameLat = 0.0 as Double
+    var newGameLong = 0.0 as Double
     @IBOutlet var addGameMap: MKMapView!
+    
+    //MARK: - Interactivity
+    
     
     //MARK: Functions
     
@@ -34,6 +40,7 @@ class AddGameViewController: UIViewController, CLLocationManagerDelegate, MKMapV
     
   
     //MARK: - Map Methods
+    
     func removePins() {
         var pins: [MKAnnotation] = NSArray(array: addGameMap.annotations) as! [MKAnnotation]
         addGameMap.removeAnnotations(pins)
@@ -59,6 +66,22 @@ class AddGameViewController: UIViewController, CLLocationManagerDelegate, MKMapV
         }
         
     }
+    
+    func mapView(mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
+        let PFLocation = PFObject(className: "Game")
+        let point = PFGeoPoint(latitude: newGameLat, longitude: newGameLong)
+        PFLocation["GameCoords"] = point
+        PFLocation.saveInBackgroundWithBlock {
+            (success: Bool, error: NSError?) -> Void in
+            if (success) {
+                 self .performSegueWithIdentifier("gameDetails", sender: self)
+            } else {
+                // There was a problem, check error.description
+            }
+        
+       
+    }
+    }
 
     
     @IBAction func tapForCoordinates(sender: UILongPressGestureRecognizer) {
@@ -67,11 +90,13 @@ class AddGameViewController: UIViewController, CLLocationManagerDelegate, MKMapV
         let touchLocation = sender.locationInView(addGameMap)
         let locationCoordinate = addGameMap.convertPoint(touchLocation, toCoordinateFromView: addGameMap)
         print("Tapped at lat: \(locationCoordinate.latitude) long: \(locationCoordinate.longitude)")
+        newGameLat = locationCoordinate.latitude
+        newGameLong = locationCoordinate.longitude
+        
         let tappedLocation = CLLocationCoordinate2DMake(locationCoordinate.latitude, locationCoordinate.longitude)
-        // Loop through and remove all old pins
         let gamePin = MKPointAnnotation()
         gamePin.coordinate = tappedLocation
-        gamePin.title = "New Game"
+        gamePin.title = "Click Here ->"
         addGameMap.addAnnotation(gamePin)
         
     }

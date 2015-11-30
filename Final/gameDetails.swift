@@ -6,7 +6,11 @@
 //  Copyright © 2015 Cameron Westbury. All rights reserved.
 //
 
-import Cocoa
+import UIKit
+import ParseUI
+import Parse
+import CoreLocation
+import MapKit
 
 class gameDetails: UIViewController {
 

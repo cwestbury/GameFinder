@@ -57,6 +57,8 @@ class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpV
         dismissViewControllerAnimated(true, completion: nil)
     }
     
+    
+    
     @IBAction func centerMapView() {
         locManger.centerMapView(gameMap)
     }

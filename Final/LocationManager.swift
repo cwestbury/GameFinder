@@ -11,9 +11,12 @@ import CoreLocation
 import MapKit
 
 class LocationManager: NSObject, CLLocationManagerDelegate {
+
     
      //MARK: - Properties
     
+
+
     static let sharedInstance = LocationManager()
     var locationManager: CLLocationManager = CLLocationManager()
     var userLocationCoordinates = CLLocationCoordinate2D()
@@ -22,11 +25,8 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
         let locValue:CLLocationCoordinate2D = manager.location!.coordinate
         userLocationCoordinates = CLLocationCoordinate2D(latitude: locations.last!.coordinate.latitude, longitude:locations.last!.coordinate.longitude)
         print("Location Manager: User location = Lat: \(locValue.latitude) Long: \(locValue.longitude)")
-        //self.locationManager.stopUpdatingLocation()
         let location = CLLocation(latitude: locValue.latitude, longitude: locValue.longitude)
         CLGeocoder().reverseGeocodeLocation(location, completionHandler: {(placemarks, error) -> Void in
-            print(location)
-            
             if error != nil {
                 print("Reverse geocoder failed with error" + error!.localizedDescription)
                 return
@@ -52,8 +52,6 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
     
     func locationManager(manager: CLLocationManager, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
         print("Got new auth status \(status.rawValue)")
-        //print(locationManager.location)
-       // locationManager.stopUpdatingLocation()
 //        setUpLocationMonitoring()
     }
     
@@ -92,6 +90,7 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
         let region = MKCoordinateRegion(center: center, span: MKCoordinateSpan(latitudeDelta: 0.0675, longitudeDelta: 0.0675))
         map.setRegion(region, animated: true)
     }
+    
     
     
     
