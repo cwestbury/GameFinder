@@ -131,6 +131,11 @@
                         <leftBarButtonItems>
                             <barButtonItem title="Profile" id="B12-FY-3hw"/>
                             <barButtonItem title="Manage" id="dp3-KD-Otp"/>
+                            <barButtonItem title="Login" id="viZ-wB-6hg">
+                                <connections>
+                                    <action selector="loginButtonPresesd:" destination="BYZ-38-t0r" id="zf5-B2-L2F"/>
+                                </connections>
+                            </barButtonItem>
                         </leftBarButtonItems>
                         <rightBarButtonItems>
                             <barButtonItem title="search" id="OQo-Uc-pMm"/>
@@ -141,6 +146,9 @@
                             </barButtonItem>
                         </rightBarButtonItems>
                     </navigationItem>
+                    <connections>
+                        <outlet property="loginButton" destination="viZ-wB-6hg" id="34N-bL-JZS"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
