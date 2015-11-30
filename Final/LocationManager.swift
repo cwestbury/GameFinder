@@ -8,6 +8,7 @@
 
 import Foundation
 import CoreLocation
+import MapKit
 
 class LocationManager: NSObject, CLLocationManagerDelegate {
     
@@ -83,6 +84,14 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
         
     }
 
+    func centerMapView(map:MKMapView) {
+        print("AddGame: Center Map View Running")
+        let currentLocaiton = locationManager.location!.coordinate
+        print(currentLocaiton)
+        let center = CLLocationCoordinate2DMake(currentLocaiton.latitude, currentLocaiton.longitude)
+        let region = MKCoordinateRegion(center: center, span: MKCoordinateSpan(latitudeDelta: 0.0675, longitudeDelta: 0.0675))
+        map.setRegion(region, animated: true)
+    }
     
     
     

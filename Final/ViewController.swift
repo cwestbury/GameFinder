@@ -22,9 +22,7 @@ class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpV
     
     var locManger = LocationManager.sharedInstance
     
-    
-    //var locationManager: CLLocationManager!
-    
+
     
     //MARK: - Login Methods
     
@@ -59,15 +57,8 @@ class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpV
         dismissViewControllerAnimated(true, completion: nil)
     }
     
-    func centerMapView() {
-        print("Center Map View Running")
-        let currentLocaiton = locManger.locationManager.location!.coordinate
-        print("currentLocaiton")
-        let center = CLLocationCoordinate2DMake(currentLocaiton.latitude, currentLocaiton.longitude)
-        let region = MKCoordinateRegion(center: center, span: MKCoordinateSpan(latitudeDelta: 0.0675, longitudeDelta: 0.0675))
-        self.gameMap.setRegion(region, animated: true)
-        
-    
+    @IBAction func centerMapView() {
+        locManger.centerMapView(gameMap)
     }
     
     //MARK: - LifeCycle Methods
@@ -76,7 +67,8 @@ class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpV
         super.viewDidLoad()
         locManger.setUpLocationMonitoring()
         gameMap.showsUserLocation = true
-        NSNotificationCenter.defaultCenter().addObserver(self, selector: "centerMapView", name: "recievedLocationFromUser", object: nil)
+        centerMapView()
+        //NSNotificationCenter.defaultCenter().addObserver(self, selector: "centerMapView", name: "recievedLocationFromUser", object: nil)
         
      
     }
