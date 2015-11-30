@@ -13,6 +13,7 @@
 		7E157E221C04D0B200474796 /* Final.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7E157E201C04D0B200474796 /* Final.xcdatamodeld */; };
 		7E157E241C04D0B200474796 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7E157E231C04D0B200474796 /* Assets.xcassets */; };
 		7E157E271C04D0B200474796 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7E157E251C04D0B200474796 /* LaunchScreen.storyboard */; };
+		7EB528911C0C9EE9006966D9 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7EB528901C0C9EE9006966D9 /* MapKit.framework */; };
 		D2E9E0BC6082338DAA907CE4 /* Pods_Final.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5D2DF1950162BE54A30281F6 /* Pods_Final.framework */; };
 /* End PBXBuildFile section */
 
@@ -27,6 +28,7 @@
 		7E157E231C04D0B200474796 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		7E157E261C04D0B200474796 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		7E157E281C04D0B200474796 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		7EB528901C0C9EE9006966D9 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		A4437999FA6D72C1389E75B5 /* Pods-Final.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Final.release.xcconfig"; path = "Pods/Target Support Files/Pods-Final/Pods-Final.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -35,6 +37,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7EB528911C0C9EE9006966D9 /* MapKit.framework in Frameworks */,
 				D2E9E0BC6082338DAA907CE4 /* Pods_Final.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -45,6 +48,7 @@
 		4DF83D916F84305526114FC7 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				7EB528901C0C9EE9006966D9 /* MapKit.framework */,
 				5D2DF1950162BE54A30281F6 /* Pods_Final.framework */,
 			);
 			name = Frameworks;
@@ -126,6 +130,11 @@
 				TargetAttributes = {
 					7E157E151C04D0B200474796 = {
 						CreatedOnToolsVersion = 7.1.1;
+						SystemCapabilities = {
+							com.apple.Maps.iOS = {
+								enabled = 1;
+							};
+						};
 					};
 				};
 			};
