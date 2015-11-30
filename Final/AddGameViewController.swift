@@ -12,7 +12,7 @@ import ParseUI
 import MapKit
 
 
-class AddGameViewController: UIViewController, CLLocationManagerDelegate {
+class AddGameViewController: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate {
    
     //MARK: - Properties
     var locManager = LocationManager.sharedInstance
@@ -32,30 +32,58 @@ class AddGameViewController: UIViewController, CLLocationManagerDelegate {
         self.presentViewController(alert, animated: true, completion: nil)
     }
     
-    func addAnnotation (Lat:Double, Long:Double) {
-        let gameLocation = CLLocationCoordinate2DMake(Lat, Long)
-        let gamePin = MKPointAnnotation()
-        gamePin.coordinate = gameLocation
-        gamePin.title = "New Game Location"
+  
+    //MARK: - Map Methods
+    func removePins() {
+        var pins: [MKAnnotation] = NSArray(array: addGameMap.annotations) as! [MKAnnotation]
+        addGameMap.removeAnnotations(pins)
+        pins.removeAll()
     }
+    
+    
+    
+    func mapView(mapView: MKMapView, viewForAnnotation annotation: MKAnnotation) -> MKAnnotationView? {
+        if annotation.isMemberOfClass(MKUserLocation.self) {
+            return nil
+        } else {
+            let identifier = "pin"
+            var pin = mapView.dequeueReusableAnnotationViewWithIdentifier(identifier) as? MKPinAnnotationView
+            if pin == nil {
+                pin = MKPinAnnotationView(annotation: annotation, reuseIdentifier: identifier)
+                pin!.canShowCallout = true
+                pin!.pinTintColor = UIColor.blueColor()
+                pin!.rightCalloutAccessoryView = UIButton(type: .DetailDisclosure) as UIView
+            }
+            pin!.annotation = annotation
+            return pin
+        }
+        
+    }
+
     
     @IBAction func tapForCoordinates(sender: UILongPressGestureRecognizer) {
         if sender.state != UIGestureRecognizerState.Began { return }
+        removePins()
         let touchLocation = sender.locationInView(addGameMap)
         let locationCoordinate = addGameMap.convertPoint(touchLocation, toCoordinateFromView: addGameMap)
         print("Tapped at lat: \(locationCoordinate.latitude) long: \(locationCoordinate.longitude)")
         let tappedLocation = CLLocationCoordinate2DMake(locationCoordinate.latitude, locationCoordinate.longitude)
-        let dropPin = MKPointAnnotation()
-        dropPin.coordinate = tappedLocation
-        addGameMap.addAnnotation(dropPin)
+        // Loop through and remove all old pins
+        let gamePin = MKPointAnnotation()
+        gamePin.coordinate = tappedLocation
+        gamePin.title = "New Game"
+        addGameMap.addAnnotation(gamePin)
         
     }
     
+    // viewForAnnotation - drop animation
+    
     
     //MARK: - Lifecycle Methods
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        //addGameMap.removeAnnotations
         addGameMap.showsUserLocation = true
         centerMapView()
         aletView()

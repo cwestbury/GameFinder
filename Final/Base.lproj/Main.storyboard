@@ -70,6 +70,7 @@
                                 <animations/>
                                 <gestureRecognizers/>
                                 <connections>
+                                    <outlet property="delegate" destination="vIS-nB-w6Y" id="8bE-9h-cEX"/>
                                     <outletCollection property="gestureRecognizers" destination="G9P-fm-eyV" appends="YES" id="cAt-OX-T6O"/>
                                 </connections>
                             </mapView>
