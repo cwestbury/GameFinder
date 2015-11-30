@@ -15,7 +15,7 @@ import MapKit
 
 class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate, CLLocationManagerDelegate {
     
-    @IBOutlet var map: MKMapView!
+    @IBOutlet var gameMap: MKMapView!
     @IBOutlet var loginButton : UIBarButtonItem!
     
     var loggedIN = false
@@ -64,7 +64,7 @@ class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpV
     override func viewDidLoad() {
         super.viewDidLoad()
         locManger.setUpLocationMonitoring()
-        //map.showsUserLocation = true
+        gameMap.showsUserLocation = true
         
      
     }

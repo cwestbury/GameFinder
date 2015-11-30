@@ -147,6 +147,7 @@
                         </rightBarButtonItems>
                     </navigationItem>
                     <connections>
+                        <outlet property="gameMap" destination="EhV-dc-1ot" id="rB3-Fw-sBC"/>
                         <outlet property="loginButton" destination="viZ-wB-6hg" id="34N-bL-JZS"/>
                     </connections>
                 </viewController>
