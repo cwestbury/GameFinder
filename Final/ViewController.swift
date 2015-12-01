@@ -96,6 +96,12 @@ class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpV
         }
     }
     
+    func removePins() {
+        var pins: [MKAnnotation] = NSArray(array: gameMap.annotations) as! [MKAnnotation]
+        gameMap.removeAnnotations(pins)
+        pins.removeAll()
+    }
+    
     
     
     //MARK: - LifeCycle Methods
@@ -105,6 +111,7 @@ class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpV
         locManger.setUpLocationMonitoring()
         gameMap.showsUserLocation = true
         centerMapView()
+        removePins()
         servManger.getGameLocation()
         RSSParser.getGameInfo()
         
