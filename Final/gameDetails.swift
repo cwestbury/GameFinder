@@ -15,6 +15,7 @@ import MapKit
 class gameDetails: UIViewController {
     
     //MARK: - Properties
+    
     let servManager = serverManager.sharedInstance
     
     @IBOutlet var location : UILabel!

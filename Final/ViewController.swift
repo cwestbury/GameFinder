@@ -13,7 +13,7 @@ import CoreLocation
 import MapKit
 
 
-class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate, CLLocationManagerDelegate {
+class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate, CLLocationManagerDelegate, MKMapViewDelegate {
     
     @IBOutlet var gameMap: MKMapView!
     @IBOutlet var loginButton : UIBarButtonItem!
@@ -21,6 +21,8 @@ class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpV
     var loggedIN = false
     
     var locManger = LocationManager.sharedInstance
+    var servManger = serverManager.sharedInstance
+    var RSSParser = rssParser.sharedInstance
     
 
     
@@ -57,11 +59,44 @@ class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpV
         dismissViewControllerAnimated(true, completion: nil)
     }
     
-    
+    //MARK: - Map Methods
     
     @IBAction func centerMapView() {
         locManger.centerMapView(gameMap)
     }
+    
+    
+    // not working??
+    func mapView(mapView: MKMapView, viewForAnnotation annotation: MKAnnotation) -> MKAnnotationView? {
+        if annotation.isMemberOfClass(MKUserLocation.self) {
+            return nil
+        } else {
+            let identifier = "pin"
+            var pin = mapView.dequeueReusableAnnotationViewWithIdentifier(identifier) as? MKPinAnnotationView
+            if pin == nil {
+                pin = MKPinAnnotationView(annotation: annotation, reuseIdentifier: identifier)
+                pin!.canShowCallout = true
+                pin!.pinTintColor = UIColor.blueColor()
+                pin!.rightCalloutAccessoryView = UIButton(type: .DetailDisclosure) as UIView
+            }
+            pin!.annotation = annotation
+            return pin
+        }
+        
+    }
+    
+    func placeLocationsOnMap(gameArray:[PFObject]) {
+        for game in gameArray {
+            let loc = game["GameCoords"] as! PFGeoPoint
+        let gamePin = MKPointAnnotation()
+                    let coords = CLLocationCoordinate2DMake(loc.latitude, loc.longitude)
+                    gamePin.coordinate = coords
+                    gamePin.title = game["Title"] as? String
+            gameMap.addAnnotation(gamePin)
+        }
+    }
+    
+    
     
     //MARK: - LifeCycle Methods
 
@@ -70,9 +105,13 @@ class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpV
         locManger.setUpLocationMonitoring()
         gameMap.showsUserLocation = true
         centerMapView()
-        //NSNotificationCenter.defaultCenter().addObserver(self, selector: "centerMapView", name: "recievedLocationFromUser", object: nil)
+        servManger.getGameLocation()
+        RSSParser.getGameInfo()
         
-     
+    }
+    
+    override func viewDidAppear(animated: Bool) {
+        placeLocationsOnMap(servManger.gameArray)
     }
     
     

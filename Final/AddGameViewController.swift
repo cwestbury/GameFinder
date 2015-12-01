@@ -13,7 +13,7 @@ import Parse
 import MapKit
 
 
-class AddGameViewController: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate, UISearchBarDelegate {
+class AddGameViewController: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate {
    
     //MARK: - Properties
     var servManager = serverManager.sharedInstance
@@ -23,10 +23,8 @@ class AddGameViewController: UIViewController, CLLocationManagerDelegate, MKMapV
     
     @IBOutlet var addGameMap: MKMapView!
     
-    //MARK: - Interactivity
     
-    
-    //MARK: Functions
+    //MARK: - Functions
     
     func centerMapView() {
         locManager.centerMapView(addGameMap)
@@ -34,7 +32,7 @@ class AddGameViewController: UIViewController, CLLocationManagerDelegate, MKMapV
     
     
 
-    func aletView() {
+    func alertView() {
         let alert = UIAlertController(title: "Add New Game", message: "Give the game a location by using the search bar or pressing on the map", preferredStyle: UIAlertControllerStyle.Alert)
         alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil))
         self.presentViewController(alert, animated: true, completion: nil)
@@ -73,7 +71,10 @@ class AddGameViewController: UIViewController, CLLocationManagerDelegate, MKMapV
        servManager.saveGeoPoint(newGameLat, long: newGameLong)
          self .performSegueWithIdentifier("gameDetails", sender: self)
     }
-
+    
+    
+    //MARK: - Interactivity
+    
     
     @IBAction func tapForCoordinates(sender: UILongPressGestureRecognizer) {
         if sender.state != UIGestureRecognizerState.Began { return }
@@ -99,10 +100,9 @@ class AddGameViewController: UIViewController, CLLocationManagerDelegate, MKMapV
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        //addGameMap.removeAnnotations
         addGameMap.showsUserLocation = true
         centerMapView()
-        aletView()
+        alertView()
      
 
         // Do any additional setup after loading the view.
@@ -114,14 +114,5 @@ class AddGameViewController: UIViewController, CLLocationManagerDelegate, MKMapV
     }
     
 
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }
