@@ -14,7 +14,6 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
 
     
      //MARK: - Properties
-    
 
 
     static let sharedInstance = LocationManager()

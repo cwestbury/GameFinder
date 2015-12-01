@@ -16,9 +16,11 @@ import MapKit
 class AddGameViewController: UIViewController, CLLocationManagerDelegate, MKMapViewDelegate, UISearchBarDelegate {
    
     //MARK: - Properties
+    var servManager = serverManager.sharedInstance
     var locManager = LocationManager.sharedInstance
     var newGameLat = 0.0 as Double
     var newGameLong = 0.0 as Double
+    
     @IBOutlet var addGameMap: MKMapView!
     
     //MARK: - Interactivity
@@ -68,19 +70,8 @@ class AddGameViewController: UIViewController, CLLocationManagerDelegate, MKMapV
     }
     
     func mapView(mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
-        let PFLocation = PFObject(className: "Game")
-        let point = PFGeoPoint(latitude: newGameLat, longitude: newGameLong)
-        PFLocation["GameCoords"] = point
-        PFLocation.saveInBackgroundWithBlock {
-            (success: Bool, error: NSError?) -> Void in
-            if (success) {
-                 self .performSegueWithIdentifier("gameDetails", sender: self)
-            } else {
-                // There was a problem, check error.description
-            }
-        
-       
-    }
+       servManager.saveGeoPoint(newGameLat, long: newGameLong)
+         self .performSegueWithIdentifier("gameDetails", sender: self)
     }
 
     
