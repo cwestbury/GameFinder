@@ -10,7 +10,7 @@ import Foundation
 import CoreLocation
 import MapKit
 
-class LocationManager: NSObject, CLLocationManagerDelegate {
+class LocationManager: NSObject, CLLocationManagerDelegate, MKMapViewDelegate {
 
     
      //MARK: - Properties
@@ -22,28 +22,32 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
     var userCity: String!
     
     func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        let locValue:CLLocationCoordinate2D = manager.location!.coordinate
-        userLocationCoordinates = CLLocationCoordinate2D(latitude: locations.last!.coordinate.latitude, longitude:locations.last!.coordinate.longitude)
-        print("Location Manager: User location = Lat: \(locValue.latitude) Long: \(locValue.longitude)")
-        let location = CLLocation(latitude: locValue.latitude, longitude: locValue.longitude)
-        CLGeocoder().reverseGeocodeLocation(location, completionHandler: {(placemarks, error) -> Void in
-            if error != nil {
-                print("Reverse geocoder failed with error" + error!.localizedDescription)
-                return
-            }
-            if placemarks!.count > 0 {
-                let pm = placemarks![0]
-                self.userCity = pm.locality!
-                print(pm.locality!)
-                
-                dispatch_async(dispatch_get_main_queue()){
-                    NSNotificationCenter.defaultCenter().postNotification(NSNotification(name: "recievedLocationFromUser", object: nil))
+        
+        if (userLocationCoordinates.latitude == 0 && userLocationCoordinates.longitude == 0) {
+            let locValue:CLLocationCoordinate2D = manager.location!.coordinate
+            userLocationCoordinates = CLLocationCoordinate2D(latitude: locations.last!.coordinate.latitude, longitude:locations.last!.coordinate.longitude)
+            print("Location Manager: User location = Lat: \(locValue.latitude) Long: \(locValue.longitude)")
+            let location = CLLocation(latitude: locValue.latitude, longitude: locValue.longitude)
+            CLGeocoder().reverseGeocodeLocation(location, completionHandler: {(placemarks, error) -> Void in
+                if error != nil {
+                    print("Reverse geocoder failed with error" + error!.localizedDescription)
+                    return
                 }
-                
-            } else {
-                print("Problem with the data received from geocoder")
-            }
-        })
+                if placemarks!.count > 0 {
+                    let pm = placemarks![0]
+                    self.userCity = pm.locality!
+                    print(pm.locality!)
+                    
+                    dispatch_async(dispatch_get_main_queue()){
+                        NSNotificationCenter.defaultCenter().postNotification(NSNotification(name: "recievedLocationFromUser", object: nil))
+                    }
+                    
+                } else {
+                    print("Problem with the data received from geocoder")
+                }
+            })
+        }
+        
     }
 
     
@@ -67,7 +71,7 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
         if CLLocationManager.locationServicesEnabled() {
             switch CLLocationManager.authorizationStatus() {
             case .AuthorizedAlways, .AuthorizedWhenInUse:
-                print("have access to location")
+                print("have access to location \(userLocationCoordinates) l:\(userLocationCoordinates.latitude)")
                 locationManager.requestLocation()
             case .Denied, .Restricted:
                 print("Location services disabled/restricted")
@@ -92,6 +96,14 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
         map.setRegion(region, animated: true)
     }
     
+    func addMapPins(map:MKMapView, lat:Double, long:Double, Title:String) {
+        let gamePin = MKPointAnnotation()
+        let gameCoords = CLLocationCoordinate2DMake(lat, long)
+        gamePin.coordinate = gameCoords
+        gamePin.title = Title
+        map.addAnnotation(gamePin)
+        
+    }
     
     
     

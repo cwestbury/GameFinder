@@ -27,7 +27,7 @@ class rssParser: NSObject, NSXMLParserDelegate {
     var parsingAnItem = false
     
     var gameArray = [Games]()
-    let newGame = Games()
+    var newGame = Games()
     
     
     //MARK: - XML Parsing Methods
@@ -38,8 +38,8 @@ class rssParser: NSObject, NSXMLParserDelegate {
             city = "WashingtonDC"
         }
         
-        let urlString = NSURL(string: "http://pickupultimate.com/rss/city/\(city)")
-        //let urlString = NSURL(string: "http://pickupultimate.com/rss/city/annarbor")
+        //let urlString = NSURL(string: "http://pickupultimate.com/rss/city/\(city)")
+        let urlString = NSURL(string: "http://pickupultimate.com/rss/city/annarbor")
         let rssURLRequest: NSURLRequest = NSURLRequest(URL: urlString!)
         
         let urlSession = NSURLSession.sharedSession()
@@ -66,6 +66,7 @@ class rssParser: NSObject, NSXMLParserDelegate {
         
         if elementName == "item" {
             parsingAnItem = true
+            newGame = Games()
         }
         if parsingAnItem {
             switch elementName {
@@ -121,6 +122,10 @@ class rssParser: NSObject, NSXMLParserDelegate {
         }
         if elementName == "item" {
             print(newGame.Title)
+            gameArray.append(newGame)
+            for game in gameArray {
+                print("THC \(game.Title)")
+            }
             // print("lat:\(LatArray)")
             //print("long:\(LongArray)")
             //                let itemEpisode = NSEntityDescription.insertNewObjectForEntityForName("Episode", inManagedObjectContext: self.managedObjectContext!) as! Episode
@@ -137,7 +142,7 @@ class rssParser: NSObject, NSXMLParserDelegate {
     func parserDidEndDocument(parser: NSXMLParser) {
         dispatch_async(dispatch_get_main_queue(), { () -> Void in
             print("Received Game Data")
-            NSNotificationCenter.defaultCenter().postNotification(NSNotification(name: "parsedEpisodeData", object: nil))
+            NSNotificationCenter.defaultCenter().postNotification(NSNotification(name: "parsedGameData", object: nil))
         })
     }
     

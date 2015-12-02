@@ -24,7 +24,7 @@ class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpV
     var servManger = serverManager.sharedInstance
     var RSSParser = rssParser.sharedInstance
     
-
+    
     
     //MARK: - Login Methods
     
@@ -85,13 +85,13 @@ class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpV
         
     }
     
-    func placeLocationsOnMap(gameArray:[PFObject]) {
+    func placeLocationsOnMapViaParse(gameArray:[PFObject]) {
         for game in gameArray {
             let loc = game["GameCoords"] as! PFGeoPoint
-        let gamePin = MKPointAnnotation()
-                    let coords = CLLocationCoordinate2DMake(loc.latitude, loc.longitude)
-                    gamePin.coordinate = coords
-                    gamePin.title = game["Title"] as? String
+            let gamePin = MKPointAnnotation()
+            let coords = CLLocationCoordinate2DMake(loc.latitude, loc.longitude)
+            gamePin.coordinate = coords
+            gamePin.title = game["Title"] as? String
             gameMap.addAnnotation(gamePin)
         }
     }
@@ -105,9 +105,18 @@ class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpV
         RSSParser.getGameInfo()
     }
     
+    func addGamesToMap() {
+        print("adding Parsed Games")
+        //let GamesToParse = Games()
+        for GamesToParse in RSSParser.gameArray {
+            print("For Loop \(GamesToParse.Title) lat \(GamesToParse.GameLat) lon \(GamesToParse.GameLong)")
+            locManger.addMapPins(gameMap, lat: GamesToParse.GameLat, long: GamesToParse.GameLong, Title: GamesToParse.Title)
+        }
+    }
+    
     
     //MARK: - LifeCycle Methods
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         locManger.setUpLocationMonitoring()
@@ -115,21 +124,21 @@ class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpV
         centerMapView()
         removePins()
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "currentLocationRecieved", name: "recievedLocationFromUser", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "addGamesToMap", name: "parsedGameData", object: nil)
         servManger.getGameLocation()
-        
-        
+
     }
     
     override func viewDidAppear(animated: Bool) {
-        placeLocationsOnMap(servManger.gameArray)
+        placeLocationsOnMapViaParse(servManger.gameArray)
     }
     
     
-
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
-
-
+    
+    
 }
 
