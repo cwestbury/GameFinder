@@ -54,6 +54,7 @@ class serverManager: NSObject {
         query.limit = 10
         do {
             try gameArray = query.findObjects()
+            
             placeLocationsOnMap(gameArray)
         } catch {
             print("Error")
@@ -71,6 +72,7 @@ class serverManager: NSObject {
 //            gamePin.title = game["Title"] as? String
 //            map.addAnnotation(gamePin)
             print("Lat:\(loc.latitude) Lon:\(loc.longitude)")
+            
         }
     }
     

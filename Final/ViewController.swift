@@ -101,7 +101,9 @@ class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpV
         gameMap.removeAnnotations(pins)
         pins.removeAll()
     }
-    
+    func currentLocationRecieved() {
+        RSSParser.getGameInfo()
+    }
     
     
     //MARK: - LifeCycle Methods
@@ -112,8 +114,9 @@ class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpV
         gameMap.showsUserLocation = true
         centerMapView()
         removePins()
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "currentLocationRecieved", name: "recievedLocationFromUser", object: nil)
         servManger.getGameLocation()
-        RSSParser.getGameInfo()
+        
         
     }
     

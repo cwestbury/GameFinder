@@ -11,6 +11,7 @@ import Foundation
 class rssParser: NSObject, NSXMLParserDelegate {
     
     static let sharedInstance = rssParser()
+    let LocManager = LocationManager.sharedInstance
     
     var xmlParser: NSXMLParser!
     
@@ -26,13 +27,19 @@ class rssParser: NSObject, NSXMLParserDelegate {
     var parsingAnItem = false
     
     var gameArray = [Games]()
+    let newGame = Games()
     
     
     //MARK: - XML Parsing Methods
     
     func getGameInfo() {
-        // let urlString = NSURL(string: "http://pickupultimate.com/rss/city/\(cityname)")
-        let urlString = NSURL(string: "http://pickupultimate.com/rss/city/annarbor")
+        var city = LocManager.userCity
+        if city == "Washington" {
+            city = "WashingtonDC"
+        }
+        
+        let urlString = NSURL(string: "http://pickupultimate.com/rss/city/\(city)")
+        //let urlString = NSURL(string: "http://pickupultimate.com/rss/city/annarbor")
         let rssURLRequest: NSURLRequest = NSURLRequest(URL: urlString!)
         
         let urlSession = NSURLSession.sharedSession()
@@ -51,7 +58,6 @@ class rssParser: NSObject, NSXMLParserDelegate {
     }
     
     func parserDidStartDocument(parser: NSXMLParser) {
-        //dataManager.removeAllEpisodes()
         gameArray.removeAll()
         //write a method that clears the array
     }
@@ -78,7 +84,7 @@ class rssParser: NSObject, NSXMLParserDelegate {
     func parser(parser: NSXMLParser, foundCharacters string: String) {
         
         if parsingAnItem {
-            let newGame = Games()
+            
             switch currentlyParsedElement {
             case "title":
                 newGame.Title = string
@@ -114,7 +120,7 @@ class rssParser: NSObject, NSXMLParserDelegate {
             }
         }
         if elementName == "item" {
-            
+            print(newGame.Title)
             // print("lat:\(LatArray)")
             //print("long:\(LongArray)")
             //                let itemEpisode = NSEntityDescription.insertNewObjectForEntityForName("Episode", inManagedObjectContext: self.managedObjectContext!) as! Episode

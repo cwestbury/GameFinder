@@ -19,6 +19,7 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
     static let sharedInstance = LocationManager()
     var locationManager: CLLocationManager = CLLocationManager()
     var userLocationCoordinates = CLLocationCoordinate2D()
+    var userCity: String!
     
     func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         let locValue:CLLocationCoordinate2D = manager.location!.coordinate
@@ -32,6 +33,7 @@ class LocationManager: NSObject, CLLocationManagerDelegate {
             }
             if placemarks!.count > 0 {
                 let pm = placemarks![0]
+                self.userCity = pm.locality!
                 print(pm.locality!)
                 
                 dispatch_async(dispatch_get_main_queue()){
