@@ -11,15 +11,19 @@ import CoreLocation
 import MapKit
 
 class LocationManager: NSObject, CLLocationManagerDelegate, MKMapViewDelegate {
-
     
-     //MARK: - Properties
-
-
+    
+    //MARK: - Properties
+    
+    
     static let sharedInstance = LocationManager()
     var locationManager: CLLocationManager = CLLocationManager()
     var userLocationCoordinates = CLLocationCoordinate2D()
     var userCity: String!
+    var searchedCity: String!
+    var searchedCityLocation: CLLocationCoordinate2D!
+    var searchedCityLat: Double!
+    var searchedCityLong: Double!
     
     func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         
@@ -49,7 +53,24 @@ class LocationManager: NSObject, CLLocationManagerDelegate, MKMapViewDelegate {
         }
         
     }
+    
+    func getSearchedLocation(searchString: String) {
+        let geocoder = CLGeocoder()
+        geocoder.geocodeAddressString(searchString) { (placemarks, error) -> Void in
+            if let firstPlacemark = placemarks?.first {
+                print("Searched Location: \(firstPlacemark.locality!)")
+                self.searchedCity = firstPlacemark.locality!
+                self.searchedCityLocation = firstPlacemark.location!.coordinate
+                
+                dispatch_async(dispatch_get_main_queue()){
+                    NSNotificationCenter.defaultCenter().postNotification(NSNotification(name: "recievedSearchedCityFromUser", object: nil))
+                }
 
+
+            }
+        }
+    }
+    
     
     func locationManager(manager: CLLocationManager, didFailWithError error: NSError) {
         print("Loc Manager Error \(error)")
@@ -57,7 +78,7 @@ class LocationManager: NSObject, CLLocationManagerDelegate, MKMapViewDelegate {
     
     func locationManager(manager: CLLocationManager, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
         print("Got new auth status \(status.rawValue)")
-//        setUpLocationMonitoring()
+        //        setUpLocationMonitoring()
     }
     
     func convertCoordinateToString(coordinate: CLLocationCoordinate2D) -> String {
@@ -86,13 +107,18 @@ class LocationManager: NSObject, CLLocationManagerDelegate, MKMapViewDelegate {
         }
         
     }
-
+    
     func centerMapView(map:MKMapView) {
         print("AddGame: Center Map View Running")
         let currentLocaiton = locationManager.location!.coordinate
         print(currentLocaiton)
         let center = CLLocationCoordinate2DMake(currentLocaiton.latitude, currentLocaiton.longitude)
         let region = MKCoordinateRegion(center: center, span: MKCoordinateSpan(latitudeDelta: 0.0675, longitudeDelta: 0.0675))
+        map.setRegion(region, animated: true)
+    }
+    func centerMapOnSearch(map:MKMapView) {
+        let center = CLLocationCoordinate2D(latitude:searchedCityLocation.latitude , longitude: searchedCityLocation.longitude)
+        let region = MKCoordinateRegion(center: center, span: MKCoordinateSpan(latitudeDelta: 0.675, longitudeDelta: 0.675))
         map.setRegion(region, animated: true)
     }
     

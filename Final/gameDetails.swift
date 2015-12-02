@@ -35,6 +35,7 @@ class gameDetails: UIViewController {
     
     
     //MARK: - Interactivity 
+    
     @IBAction func saveAndPop() {
         servManager.saveGameDetails(date.text!, Title: time.text!, GameDescription: gameDescription.text!, Cost: cost.text!, Email: email.text!, Facebook:facebook.text!, Website: website.text!, Phone: phone.text!, creatorName: creatorName.text!)
             self.navigationController!.popToRootViewControllerAnimated(true)

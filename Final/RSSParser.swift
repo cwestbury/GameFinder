@@ -15,37 +15,51 @@ class rssParser: NSObject, NSXMLParserDelegate {
     
     var xmlParser: NSXMLParser!
     
-//    var titleList = [String]()
-//    var gameDescriptions = [String]()
-//    
-//    var gameLat = 0.0 as Double
-//    var gameLong = 0.0 as Double
-//    var LatArray = [0.0]
-//    var LongArray = [0.0]
-    
     var currentlyParsedElement = String()
     var parsingAnItem = false
     
     var gameArray = [Games]()
     var newGame = Games()
+    var city = String()
+    var searchedUrlString = NSURL()
+    var currentLocationUrlString = NSURL()
+    var rssUrlRequest = NSURLRequest()
     
     
     //MARK: - XML Parsing Methods
     
-    func getGameInfo() {
-        var city = LocManager.userCity
+    func searchedNSURLString(SeachedCity: String) {
+        let dirtyString = SeachedCity
+        
+        let cleanString = dirtyString.lowercaseString.stringByReplacingOccurrencesOfString(" ", withString: "")
+        searchedUrlString = NSURL(string: "http://pickupultimate.com/rss/city/\(cleanString)")!
+        print("City to Parse! - \(searchedUrlString)")
+    }
+    
+    func currentLocationNSURLString(){
+        city = LocManager.userCity
         if city == "Washington" {
             city = "WashingtonDC"
         }
+        currentLocationUrlString = NSURL(string: "http://pickupultimate.com/rss/city/\(city)")!
         
-        //let urlString = NSURL(string: "http://pickupultimate.com/rss/city/\(city)")
-        let urlString = NSURL(string: "http://pickupultimate.com/rss/city/annarbor")
-        let rssURLRequest: NSURLRequest = NSURLRequest(URL: urlString!)
         
+    }
+    
+    func getGameInfo() {
+        print("Search String: \(searchedUrlString.relativeString)")
+        if searchedUrlString.relativeString == nil {
+            rssUrlRequest = NSURLRequest(URL: currentLocationUrlString)
+            print("Current Location String: \(currentLocationUrlString)")
+            
+        } else {
+            rssUrlRequest = NSURLRequest(URL: searchedUrlString)
+            print("Searched String: \(searchedUrlString)")
+        }
         let urlSession = NSURLSession.sharedSession()
-        let task = urlSession.dataTaskWithRequest(rssURLRequest) { (data, response, error) -> Void in
+        let task = urlSession.dataTaskWithRequest(rssUrlRequest) { (data, response, error) -> Void in
             if data != nil {
-                print("Got Data")
+                print("Got XML Data")
                 self.xmlParser = NSXMLParser(data: data!)
                 self.xmlParser.delegate = self
                 self.xmlParser.parse()
@@ -59,7 +73,6 @@ class rssParser: NSObject, NSXMLParserDelegate {
     
     func parserDidStartDocument(parser: NSXMLParser) {
         gameArray.removeAll()
-        //write a method that clears the array
     }
     
     func parser(parser: NSXMLParser, didStartElement elementName: String, namespaceURI: String?, qualifiedName qName: String?, attributes attributeDict: [String : String]) {
@@ -121,27 +134,16 @@ class rssParser: NSObject, NSXMLParserDelegate {
             }
         }
         if elementName == "item" {
-            print(newGame.Title)
+            //print(newGame.Title)
             gameArray.append(newGame)
-            for game in gameArray {
-                print("THC \(game.Title)")
-            }
-            // print("lat:\(LatArray)")
-            //print("long:\(LongArray)")
-            //                let itemEpisode = NSEntityDescription.insertNewObjectForEntityForName("Episode", inManagedObjectContext: self.managedObjectContext!) as! Episode
-            //                itemEpisode.episodeTitle = entryTitle
-            //                itemEpisode.episodeDate = entryDate
-            //                itemEpisode.episodeDescription = entryDescription
-            //                itemEpisode.episodeDuration = entryDuration
-            //                appDelegate.saveContext()
-            
+     
             parsingAnItem = false
         }
     }
     
     func parserDidEndDocument(parser: NSXMLParser) {
         dispatch_async(dispatch_get_main_queue(), { () -> Void in
-            print("Received Game Data")
+            print("Parsed XML Game Data")
             NSNotificationCenter.defaultCenter().postNotification(NSNotification(name: "parsedGameData", object: nil))
         })
     }

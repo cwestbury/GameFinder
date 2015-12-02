@@ -13,16 +13,19 @@ import CoreLocation
 import MapKit
 
 
-class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate, CLLocationManagerDelegate, MKMapViewDelegate {
+class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate, CLLocationManagerDelegate, UISearchBarDelegate, MKMapViewDelegate {
     
     @IBOutlet var gameMap: MKMapView!
     @IBOutlet var loginButton : UIBarButtonItem!
+    @IBOutlet var LocationSearchBar: UISearchBar!
     
     var loggedIN = false
     
     var locManger = LocationManager.sharedInstance
     var servManger = serverManager.sharedInstance
     var RSSParser = rssParser.sharedInstance
+    
+    var searchBarCity : String!
     
     
     
@@ -58,6 +61,28 @@ class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpV
     func signUpViewControllerDidCancelSignUp(signUpController: PFSignUpViewController) {
         dismissViewControllerAnimated(true, completion: nil)
     }
+    
+    //MARK: - Search Bar Methods 
+    func searchBarSearchButtonClicked(searchBar: UISearchBar) {
+        if LocationSearchBar.text != nil {
+            locManger.getSearchedLocation(LocationSearchBar.text!)
+           // searchedCity = locManger.searchedCity
+            //print(searchedCity)
+           // RSSParser.searchedNSURLString(locManger.searchedCity)
+            searchBar.resignFirstResponder()
+        }
+    }
+    
+    func searchCity() {
+        searchBarCity = locManger.searchedCity
+        print("searchBar City: \(searchBarCity)")
+        RSSParser.searchedNSURLString(searchBarCity)
+        RSSParser.getGameInfo()
+        locManger.centerMapOnSearch(gameMap)
+    }
+    
+    
+    
     
     //MARK: - Map Methods
     
@@ -102,17 +127,21 @@ class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpV
         pins.removeAll()
     }
     func currentLocationRecieved() {
+        RSSParser.currentLocationNSURLString()
         RSSParser.getGameInfo()
     }
     
     func addGamesToMap() {
         print("adding Parsed Games")
         //let GamesToParse = Games()
+        removePins() //NOTE THIS IS REMOVING THE ADDED GAMES AS WELL
         for GamesToParse in RSSParser.gameArray {
-            print("For Loop \(GamesToParse.Title) lat \(GamesToParse.GameLat) lon \(GamesToParse.GameLong)")
+           // print("For Loop \(GamesToParse.Title) lat \(GamesToParse.GameLat) lon \(GamesToParse.GameLong)")
             locManger.addMapPins(gameMap, lat: GamesToParse.GameLat, long: GamesToParse.GameLong, Title: GamesToParse.Title)
         }
     }
+    
+    
     
     
     //MARK: - LifeCycle Methods
@@ -125,12 +154,16 @@ class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpV
         removePins()
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "currentLocationRecieved", name: "recievedLocationFromUser", object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "addGamesToMap", name: "parsedGameData", object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "searchCity", name: "recievedSearchedCityFromUser", object: nil)
         servManger.getGameLocation()
 
     }
     
     override func viewDidAppear(animated: Bool) {
         placeLocationsOnMapViaParse(servManger.gameArray)
+    }
+    override func viewDidDisappear(animated: Bool) {
+       // gameMap.removeAnnotation()
     }
     
     
