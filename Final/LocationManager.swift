@@ -108,6 +108,8 @@ class LocationManager: NSObject, CLLocationManagerDelegate, MKMapViewDelegate {
         
     }
     
+    //MARK: - Map Methods
+    
     func centerMapView(map:MKMapView) {
         print("AddGame: Center Map View Running")
         let currentLocaiton = locationManager.location!.coordinate
@@ -122,11 +124,12 @@ class LocationManager: NSObject, CLLocationManagerDelegate, MKMapViewDelegate {
         map.setRegion(region, animated: true)
     }
     
-    func addMapPins(map:MKMapView, lat:Double, long:Double, Title:String) {
-        let gamePin = MKPointAnnotation()
+    func addMapPins(map:MKMapView, lat:Double, long:Double, Title:String, game: Games) {
+        let gamePin = GamePointAnnotation()
         let gameCoords = CLLocationCoordinate2DMake(lat, long)
         gamePin.coordinate = gameCoords
         gamePin.title = Title
+        gamePin.pinGame = game
         map.addAnnotation(gamePin)
         
     }

@@ -18,6 +18,7 @@ class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpV
     @IBOutlet var gameMap: MKMapView!
     @IBOutlet var loginButton : UIBarButtonItem!
     @IBOutlet var LocationSearchBar: UISearchBar!
+    var selectedGame :Games!
     
     var loggedIN = false
     
@@ -91,7 +92,6 @@ class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpV
     }
     
     
-    // not working??
     func mapView(mapView: MKMapView, viewForAnnotation annotation: MKAnnotation) -> MKAnnotationView? {
         if annotation.isMemberOfClass(MKUserLocation.self) {
             return nil
@@ -109,14 +109,23 @@ class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpV
         }
         
     }
+    func mapView(mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
+        //servManager.saveGeoPoint(newGameLat, long: newGameLong)
+        let annotation = view.annotation as! GamePointAnnotation
+        selectedGame = annotation.pinGame
+        self .performSegueWithIdentifier("gameDetailSegue", sender: self)
+    }
     
     func placeLocationsOnMapViaParse(gameArray:[PFObject]) {
         for game in gameArray {
             let loc = game["GameCoords"] as! PFGeoPoint
-            let gamePin = MKPointAnnotation()
+            let gamePin = GamePointAnnotation()
             let coords = CLLocationCoordinate2DMake(loc.latitude, loc.longitude)
             gamePin.coordinate = coords
             gamePin.title = game["Title"] as? String
+            //gamePin.subtitle = game["Descritpion"] as? String
+           
+            
             gameMap.addAnnotation(gamePin)
         }
     }
@@ -126,6 +135,9 @@ class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpV
         gameMap.removeAnnotations(pins)
         pins.removeAll()
     }
+    
+    
+    
     func currentLocationRecieved() {
         RSSParser.currentLocationNSURLString()
         RSSParser.getGameInfo()
@@ -137,10 +149,33 @@ class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpV
         removePins() //NOTE THIS IS REMOVING THE ADDED GAMES AS WELL
         for GamesToParse in RSSParser.gameArray {
            // print("For Loop \(GamesToParse.Title) lat \(GamesToParse.GameLat) lon \(GamesToParse.GameLong)")
-            locManger.addMapPins(gameMap, lat: GamesToParse.GameLat, long: GamesToParse.GameLong, Title: GamesToParse.Title)
+            locManger.addMapPins(gameMap, lat: GamesToParse.GameLat, long: GamesToParse.GameLong, Title: GamesToParse.Title, game: GamesToParse)
+        }
+    }
+    //MARK: - Segue Methods
+    
+    
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if (segue.identifier == "gameDetailSegue"){
+           let destController = segue.destinationViewController as! GameDetailsViewController
+            destController.selectedGame = selectedGame
+            
+            //destController.GameDescription.text = RSSParser.gameArray.description
         }
     }
     
+//    override func prepareForSegue(segue: UIStoryboardSegue!, sender: AnyObject!) {
+//        if (segue.identifier == "YourSegueName") {
+//            //get a reference to the destination view controller
+//            let destinationVC:ViewControllerClass = segue.destinationViewController
+//            
+//            //set properties on the destination view controller
+//            destinationVC.name = viewName
+//            //etc...
+//        }
+//    }
+  
     
     
     

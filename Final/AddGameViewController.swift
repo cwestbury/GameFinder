@@ -69,7 +69,7 @@ class AddGameViewController: UIViewController, CLLocationManagerDelegate, MKMapV
     
     func mapView(mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
        //servManager.saveGeoPoint(newGameLat, long: newGameLong)
-         self .performSegueWithIdentifier("gameDetails", sender: self)
+         self .performSegueWithIdentifier("addGameDetails", sender: self)
     }
     
     

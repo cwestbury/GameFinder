@@ -12,7 +12,7 @@ class Games: NSObject {
 
     var GameLat :Double!
     var GameLong :Double!
-    var Description :String!
+    var GameDescription :String!
     var Title :String!
     
 }

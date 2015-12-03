@@ -103,7 +103,7 @@ class rssParser: NSObject, NSXMLParserDelegate {
             case "title":
                 newGame.Title = string
             case "description":
-                newGame.Description = string
+                newGame.GameDescription = string
             case "geo:lat":
                 let latCoords = Double(string)!
                 newGame.GameLat = latCoords
