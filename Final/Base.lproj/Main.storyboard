@@ -294,21 +294,17 @@
                                     <segue destination="Kzx-Se-N0b" kind="show" id="8RS-x6-kZv"/>
                                 </connections>
                             </barButtonItem>
-                            <barButtonItem title="Manage" id="dp3-KD-Otp"/>
                             <barButtonItem title="Login" id="viZ-wB-6hg">
                                 <connections>
                                     <action selector="loginButtonPresesd:" destination="BYZ-38-t0r" id="zf5-B2-L2F"/>
                                 </connections>
                             </barButtonItem>
                         </leftBarButtonItems>
-                        <rightBarButtonItems>
-                            <barButtonItem title="search" id="OQo-Uc-pMm"/>
-                            <barButtonItem title="add game" id="LT8-8b-xkh">
-                                <connections>
-                                    <segue destination="vIS-nB-w6Y" kind="show" id="wTv-uP-3aa"/>
-                                </connections>
-                            </barButtonItem>
-                        </rightBarButtonItems>
+                        <barButtonItem key="rightBarButtonItem" title="add game" id="LT8-8b-xkh">
+                            <connections>
+                                <action selector="addGamePressed" destination="BYZ-38-t0r" id="NfT-Pz-wJ1"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="LocationSearchBar" destination="6uq-Yq-sRg" id="Sg0-IS-4CA"/>
@@ -333,8 +329,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" selectable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="b3c-0T-IvS">
-                                <rect key="frame" x="0.0" y="345" width="600" height="255"/>
+                            <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" editable="NO" translatesAutoresizingMaskIntoConstraints="NO" id="b3c-0T-IvS">
+                                <rect key="frame" x="0.0" y="417" width="600" height="183"/>
                                 <animations/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <mutableString key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</mutableString>
@@ -358,7 +354,7 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
                             <constraint firstItem="cG2-IG-aGL" firstAttribute="top" secondItem="tr3-9Q-N21" secondAttribute="bottom" id="PNb-dV-f40"/>
-                            <constraint firstItem="b3c-0T-IvS" firstAttribute="top" secondItem="tr3-9Q-N21" secondAttribute="bottom" constant="281" id="QDm-Fe-m5A"/>
+                            <constraint firstItem="b3c-0T-IvS" firstAttribute="top" secondItem="tr3-9Q-N21" secondAttribute="bottom" constant="353" id="QDm-Fe-m5A"/>
                             <constraint firstAttribute="trailingMargin" secondItem="cG2-IG-aGL" secondAttribute="trailing" constant="-20" id="RBn-zM-u4B"/>
                             <constraint firstItem="96E-VW-mn3" firstAttribute="top" secondItem="b3c-0T-IvS" secondAttribute="bottom" id="YdV-Zl-sJz"/>
                             <constraint firstItem="b3c-0T-IvS" firstAttribute="leading" secondItem="5Et-Qz-PDi" secondAttribute="leadingMargin" constant="-20" id="ghg-vg-GFe"/>
@@ -371,7 +367,7 @@
                         <nil key="title"/>
                         <barButtonItem key="rightBarButtonItem" style="plain" id="zFr-a4-A1F">
                             <segmentedControl key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" id="Vg4-W3-kfr">
-                                <rect key="frame" x="348" y="8" width="232" height="29"/>
+                                <rect key="frame" x="348" y="7" width="232" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <animations/>
                                 <constraints>
@@ -380,7 +376,7 @@
                                 <segments>
                                     <segment title="Hybrid"/>
                                     <segment title="Standard"/>
-                                    <segment title="Satalite"/>
+                                    <segment title="Center"/>
                                 </segments>
                                 <connections>
                                     <action selector="selectedSegmentChanged:" destination="NEi-T6-JKQ" eventType="valueChanged" id="VgT-oZ-Et9"/>

@@ -37,6 +37,7 @@ class GameDetailsViewController: UIViewController, MKMapViewDelegate {
                 pin!.canShowCallout = true
                 pin!.pinTintColor = UIColor.blueColor()
                 pin!.rightCalloutAccessoryView = UIButton(type: .DetailDisclosure) as UIView
+                pin!.animatesDrop = true
             }
             pin!.annotation = annotation
             return pin
@@ -50,7 +51,7 @@ class GameDetailsViewController: UIViewController, MKMapViewDelegate {
     }
     
     func addGameToMap(){
-        locManager.addMapPins(SingleGameMap, lat: selectedGame.GameLat, long: selectedGame.GameLong, Title: selectedGame.Title, game: selectedGame)
+        locManager.addMapPins(SingleGameMap, lat: selectedGame.GameLat, long: selectedGame.GameLong, Title: "Route", game: selectedGame)
     }
     
     @IBAction func selectedSegmentChanged(sender:UISegmentedControl){
@@ -61,46 +62,47 @@ class GameDetailsViewController: UIViewController, MKMapViewDelegate {
         case 1:
             SingleGameMap.mapType = .Standard
         case 2:
-            SingleGameMap.mapType = .Satellite
+            centerMapOnSearch()
         default:
             break
             
         }
         
     }
-
+    
     func mapView(mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
         route()
         bottomConstraint.constant = 0
-       // SingleGameMap.heightAnchor.increaseSize(UIScreen.mainScreen().bounds.height)
     }
     //MARK: - Rounting Methods
-        
+    
     func route() {
-            let request = MKDirectionsRequest()
-            request.source = MKMapItem(placemark: MKPlacemark(coordinate: CLLocationCoordinate2D(latitude: locManager.userLocationCoordinates.latitude, longitude: locManager.userLocationCoordinates.longitude), addressDictionary: nil))
-            request.destination = MKMapItem(placemark: MKPlacemark(coordinate: CLLocationCoordinate2D(latitude: selectedGame.GameLat, longitude: selectedGame.GameLong), addressDictionary: nil))
-            request.requestsAlternateRoutes = true
-            request.transportType = .Automobile
-            
-            let directions = MKDirections(request: request)
-            
-            directions.calculateDirectionsWithCompletionHandler { [unowned self] response, error in
-                guard let unwrappedResponse = response else { return }
-                
-                for route in unwrappedResponse.routes {
-                    self.SingleGameMap.addOverlay(route.polyline)
-                    self.SingleGameMap.setVisibleMapRect(route.polyline.boundingMapRect, animated: true)
+        let request = MKDirectionsRequest()
+        request.source = MKMapItem(placemark: MKPlacemark(coordinate: CLLocationCoordinate2D(latitude: locManager.userLocationCoordinates.latitude, longitude: locManager.userLocationCoordinates.longitude), addressDictionary: nil))
+        request.destination = MKMapItem(placemark: MKPlacemark(coordinate: CLLocationCoordinate2D(latitude: selectedGame.GameLat, longitude: selectedGame.GameLong), addressDictionary: nil))
+        request.requestsAlternateRoutes = true
+        request.transportType = .Automobile
+        
+        let directions = MKDirections(request: request)
+        
+        directions.calculateDirectionsWithCompletionHandler { [unowned self] response, error in
+            guard let unwrappedResponse = response else { return }
+            for route in unwrappedResponse.routes {
+                self.SingleGameMap.addOverlay(route.polyline)
+                self.SingleGameMap.setVisibleMapRect(route.polyline.boundingMapRect, animated: true)
+                for step in route.steps {
+                    print(step.instructions)
                 }
             }
         }
-        
-        func mapView(mapView: MKMapView, rendererForOverlay overlay: MKOverlay) -> MKOverlayRenderer {
-            let renderer = MKPolylineRenderer(polyline: overlay as! MKPolyline)
-            renderer.strokeColor = UIColor.blueColor()
-            renderer.lineWidth = 5
-            return renderer
-        }
+    }
+    
+    func mapView(mapView: MKMapView, rendererForOverlay overlay: MKOverlay) -> MKOverlayRenderer {
+        let renderer = MKPolylineRenderer(polyline: overlay as! MKPolyline)
+        renderer.strokeColor = UIColor.blueColor()
+        renderer.lineWidth = 5
+        return renderer
+    }
     
     //MARK: - XMLString Cleaning Methods
     
@@ -122,7 +124,7 @@ class GameDetailsViewController: UIViewController, MKMapViewDelegate {
         }
         
     }
-   
+    
     
     
     
@@ -150,8 +152,9 @@ class GameDetailsViewController: UIViewController, MKMapViewDelegate {
         
         removeCharactersFromString(dirtyString, characterToRemove: ">", characterReplacedBy: " ")
         
-        
+        GameDescription.font = UIFont(name: "Damascus", size: 20.0) //not working
         GameDescription.text = cleanString
+        
         
         // Do any additional setup after loading the view.
     }

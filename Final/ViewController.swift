@@ -11,6 +11,7 @@ import ParseUI
 import Parse
 import CoreLocation
 import MapKit
+import SafariServices
 
 
 class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpViewControllerDelegate, CLLocationManagerDelegate, UISearchBarDelegate, MKMapViewDelegate {
@@ -28,7 +29,15 @@ class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpV
     
     var searchBarCity : String!
     
-    
+    //MARK: - Interacvity
+    @IBAction func addGamePressed() {
+        
+        if let url = NSURL(string: "http://pickupultimate.com/game/add") {
+            let viewcont = SFSafariViewController(URL: url)
+            presentViewController(viewcont, animated: true, completion: nil)
+        }
+    }
+        
     
     //MARK: - Login Methods
     
@@ -64,6 +73,7 @@ class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpV
     }
     
     //MARK: - Search Bar Methods 
+    
     func searchBarSearchButtonClicked(searchBar: UISearchBar) {
         if LocationSearchBar.text != nil {
             locManger.getSearchedLocation(LocationSearchBar.text!)
@@ -102,6 +112,7 @@ class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpV
                 pin = MKPinAnnotationView(annotation: annotation, reuseIdentifier: identifier)
                 pin!.canShowCallout = true
                 pin!.pinTintColor = UIColor.blueColor()
+                pin!.animatesDrop = true
                 pin!.rightCalloutAccessoryView = UIButton(type: .DetailDisclosure) as UIView
             }
             pin!.annotation = annotation
@@ -116,19 +127,19 @@ class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpV
         self .performSegueWithIdentifier("gameDetailSegue", sender: self)
     }
     
-    func placeLocationsOnMapViaParse(gameArray:[PFObject]) {
-        for game in gameArray {
-            let loc = game["GameCoords"] as! PFGeoPoint
-            let gamePin = GamePointAnnotation()
-            let coords = CLLocationCoordinate2DMake(loc.latitude, loc.longitude)
-            gamePin.coordinate = coords
-            gamePin.title = game["Title"] as? String
-            //gamePin.subtitle = game["Descritpion"] as? String
-           
-            
-            gameMap.addAnnotation(gamePin)
-        }
-    }
+////    func placeLocationsOnMapViaParse(gameArray:[PFObject]) {
+////        for game in gameArray {
+////            let loc = game["GameCoords"] as! PFGeoPoint
+////            let gamePin = GamePointAnnotation()
+////            let coords = CLLocationCoordinate2DMake(loc.latitude, loc.longitude)
+////            gamePin.coordinate = coords
+////            gamePin.title = game["Title"] as? String
+////            //gamePin.subtitle = game["Descritpion"] as? String
+//    
+//            
+//            gameMap.addAnnotation(gamePin)
+//        }
+//    }
     
     func removePins() {
         var pins: [MKAnnotation] = NSArray(array: gameMap.annotations) as! [MKAnnotation]
@@ -144,7 +155,7 @@ class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpV
     }
     
     func addGamesToMap() {
-        print("adding Parsed Games")
+        print("adding XML parsed Games")
         //let GamesToParse = Games()
         removePins() //NOTE THIS IS REMOVING THE ADDED GAMES AS WELL
         for GamesToParse in RSSParser.gameArray {
@@ -161,21 +172,9 @@ class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpV
            let destController = segue.destinationViewController as! GameDetailsViewController
             destController.selectedGame = selectedGame
             
-            //destController.GameDescription.text = RSSParser.gameArray.description
         }
     }
     
-//    override func prepareForSegue(segue: UIStoryboardSegue!, sender: AnyObject!) {
-//        if (segue.identifier == "YourSegueName") {
-//            //get a reference to the destination view controller
-//            let destinationVC:ViewControllerClass = segue.destinationViewController
-//            
-//            //set properties on the destination view controller
-//            destinationVC.name = viewName
-//            //etc...
-//        }
-//    }
-  
     
     
     
@@ -187,15 +186,17 @@ class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpV
         gameMap.showsUserLocation = true
         centerMapView()
         removePins()
+        
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "currentLocationRecieved", name: "recievedLocationFromUser", object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "addGamesToMap", name: "parsedGameData", object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "searchCity", name: "recievedSearchedCityFromUser", object: nil)
-        servManger.getGameLocation()
+        
+        //servManger.getGameLocation()
 
     }
     
     override func viewDidAppear(animated: Bool) {
-        placeLocationsOnMapViaParse(servManger.gameArray)
+        //placeLocationsOnMapViaParse(servManger.gameArray)
     }
     override func viewDidDisappear(animated: Bool) {
        // gameMap.removeAnnotation()
