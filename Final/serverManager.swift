@@ -16,7 +16,7 @@ class serverManager: NSObject {
     
     static let sharedInstance = serverManager()
     var locManager = LocationManager.sharedInstance
-    let gameClass = PFObject(className: "Game")
+    var gameClass = PFObject(className: "Games")
     var gameArray = [PFObject]()
     
     //MARK: -  Save Parse Methods
@@ -27,6 +27,16 @@ class serverManager: NSObject {
         gameClass["GameCoords"] = GeoPoint
         gameClass.saveInBackground()
  
+    }
+    
+    func saveGameFromWebsite(title:String, gameDescription:String, gameLat:Double, gameLong:Double){
+        print("Saving \(title)")
+        let newGame = PFObject(className: "Games")
+        newGame["Title"] = title
+        newGame["GameDescprition"] = gameDescription
+        let GeoPoint = PFGeoPoint(latitude: gameLat, longitude: gameLong)
+        newGame["GameCoords"] = GeoPoint
+        newGame.saveInBackground()
     }
     
     

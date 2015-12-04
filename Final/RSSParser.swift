@@ -12,6 +12,7 @@ class rssParser: NSObject, NSXMLParserDelegate {
     
     static let sharedInstance = rssParser()
     let LocManager = LocationManager.sharedInstance
+    let servManager = serverManager.sharedInstance
     
     var xmlParser: NSXMLParser!
     
@@ -24,6 +25,47 @@ class rssParser: NSObject, NSXMLParserDelegate {
     var searchedUrlString = NSURL()
     var currentLocationUrlString = NSURL()
     var rssUrlRequest = NSURLRequest()
+    
+    var cleanString: String!
+    var dirtyString: String!
+    
+    
+    
+    //MARK: - XMLString Cleaning Methods
+    
+    func removeCharactersFromString(uncleanString:String, characterToRemove:String, characterReplacedBy:String){
+        
+        cleanString =  uncleanString.stringByReplacingOccurrencesOfString("\(characterToRemove)", withString: "\(characterReplacedBy)")
+        dirtyString = cleanString
+        
+        
+    }
+    
+    func removeRange(searchStart:String, SearchEnd:String) {
+        if let rangeToRemove = dirtyString.rangeOfString("(?<=\(searchStart))[^\(SearchEnd)]+", options: .RegularExpressionSearch) {
+            let stringToRemove = dirtyString.substringWithRange(rangeToRemove)
+            print(stringToRemove)
+            let clean = dirtyString.stringByReplacingCharactersInRange(rangeToRemove, withString: "")
+            dirtyString = clean
+            cleanString = dirtyString
+        }
+        
+    }
+    
+    func cleaningString() {
+        removeCharactersFromString(dirtyString, characterToRemove: "<b>", characterReplacedBy: "")
+        removeCharactersFromString(dirtyString, characterToRemove: "</b>", characterReplacedBy: "")
+        removeCharactersFromString(dirtyString, characterToRemove: "<br />", characterReplacedBy: "\r\n")
+        removeCharactersFromString(dirtyString, characterToRemove: "</b>", characterReplacedBy: "")
+        removeCharactersFromString(dirtyString, characterToRemove: "<a>", characterReplacedBy: "")
+        removeCharactersFromString(dirtyString, characterToRemove: "</a>", characterReplacedBy: "")
+        
+        
+        removeRange("Email:", SearchEnd: ">")
+        removeRange("Website:", SearchEnd: ">")
+        removeRange("List:", SearchEnd: ">")
+    }
+    
     
     
     //MARK: - XML Parsing Methods
@@ -55,7 +97,8 @@ class rssParser: NSObject, NSXMLParserDelegate {
         if city == "Washington" {
             city = "WashingtonDC"
         }
-        currentLocationUrlString = NSURL(string: "http://pickupultimate.com/rss/city/\(city)")!
+        //currentLocationUrlString = NSURL(string: "http://pickupultimate.com/rss/city/\(city)")!
+        currentLocationUrlString = NSURL(string: "http://pickupultimate.com/rss/city/annarbor")!
         
         
     }
@@ -118,6 +161,8 @@ class rssParser: NSObject, NSXMLParserDelegate {
                 newGame.Title = string
             case "description":
                 newGame.GameDescription = string
+                dirtyString  = newGame.GameDescription //will this work?
+                cleaningString()
             case "geo:lat":
                 let latCoords = Double(string)!
                 newGame.GameLat = latCoords
@@ -150,6 +195,10 @@ class rssParser: NSObject, NSXMLParserDelegate {
         if elementName == "item" {
             //print(newGame.Title)
             gameArray.append(newGame)
+            print("new game:\(newGame.Title)") //prints 3 games?
+            //print("Clean Sting Starts here: \(cleanString)")
+            
+            servManager.saveGameFromWebsite(newGame.Title, gameDescription: cleanString, gameLat: newGame.GameLat, gameLong: newGame.GameLong) //but this only saves the last game?
      
             parsingAnItem = false
         }

@@ -20,8 +20,7 @@ class GameDetailsViewController: UIViewController, MKMapViewDelegate {
     
     let locManager = LocationManager.sharedInstance
     var selectedGame :Games!
-    var emailCleanedString :String!
-    var mailingListCleanedString: String!
+
     var cleanString: String!
     var dirtyString: String!
     

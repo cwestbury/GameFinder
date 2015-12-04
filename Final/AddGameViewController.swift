@@ -33,7 +33,7 @@ class AddGameViewController: UIViewController, CLLocationManagerDelegate, MKMapV
     
 
     func alertView() {
-        let alert = UIAlertController(title: "Add New Game", message: "Give the game a location by using the search bar or pressing on the map", preferredStyle: UIAlertControllerStyle.Alert)
+        let alert = UIAlertController(title: "Add New Game", message: "Give the game a location by pressing on the map", preferredStyle: UIAlertControllerStyle.Alert)
         alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil))
         self.presentViewController(alert, animated: true, completion: nil)
     }
@@ -59,6 +59,7 @@ class AddGameViewController: UIViewController, CLLocationManagerDelegate, MKMapV
                 pin = MKPinAnnotationView(annotation: annotation, reuseIdentifier: identifier)
                 pin!.canShowCallout = true
                 pin!.pinTintColor = UIColor.blueColor()
+                pin!.animatesDrop = true
                 pin!.rightCalloutAccessoryView = UIButton(type: .DetailDisclosure) as UIView
             }
             pin!.annotation = annotation
