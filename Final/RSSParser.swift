@@ -100,15 +100,15 @@ class rssParser: NSObject, NSXMLParserDelegate {
     }
     
     func currentLocationNSURLString(){
-        //city = LocManager.userCity
-        city = "annarbor"
+        city = LocManager.userCity
+        //city = "annarbor"
         if city == "Washington" {
             city = "WashingtonDC"
         }
         
         
         currentLocationUrlString = NSURL(string: "http://pickupultimate.com/rss/city/\(city)")!
-        // currentLocationUrlString = NSURL(string: "http://pickupultimate.com/rss/city/annarbor")!
+        
         
         
     }
