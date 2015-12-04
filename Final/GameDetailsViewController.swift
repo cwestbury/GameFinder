@@ -8,6 +8,7 @@
 
 import UIKit
 import MapKit
+import Parse
 
 
 class GameDetailsViewController: UIViewController, MKMapViewDelegate {
@@ -15,14 +16,19 @@ class GameDetailsViewController: UIViewController, MKMapViewDelegate {
     //MARK: - Properties
     @IBOutlet var SingleGameMap: MKMapView!
     @IBOutlet var GameDescription: UITextView!
-    @IBOutlet var mapController: UISegmentedControl!
-    @IBOutlet var bottomConstraint: NSLayoutConstraint!
+    //@IBOutlet var mapController: UISegmentedControl!
+    //@IBOutlet var bottomConstraint: NSLayoutConstraint!
+    @IBOutlet var NavBarTitle: UINavigationItem!
+    @IBOutlet var attendanceSwtich: UISwitch!
     
     let locManager = LocationManager.sharedInstance
     var selectedGame :Games!
 
     var cleanString: String!
     var dirtyString: String!
+    
+    let currentUser = PFUser.currentUser()
+    let currentlyViewedGame = PFObject(className: "Games")
     
     //MARK: - Map Functions
     
@@ -70,26 +76,26 @@ class GameDetailsViewController: UIViewController, MKMapViewDelegate {
         locManager.addMapPins(SingleGameMap, lat: selectedGame.GameLat, long: selectedGame.GameLong, Title: "Route", game: selectedGame)
     }
     
-    @IBAction func selectedSegmentChanged(sender:UISegmentedControl){
-        switch mapController.selectedSegmentIndex
-        {
-        case 0:
-            SingleGameMap.mapType = .Hybrid
-        case 1:
-            SingleGameMap.mapType = .Standard
-        case 2:
-            centerMapOnSearch()
-        default:
-            break
-            
-        }
-        
-    }
+//    @IBAction func selectedSegmentChanged(sender:UISegmentedControl){
+//        switch mapController.selectedSegmentIndex
+//        {
+//        case 0:
+//            SingleGameMap.mapType = .Hybrid
+//        case 1:
+//            SingleGameMap.mapType = .Standard
+//        case 2:
+//            centerMapOnSearch()
+//        default:
+//            break
+//            
+//        }
+//        
+//    }
     
     func mapView(mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
         //route()
         openMap()
-        bottomConstraint.constant = 0
+        //bottomConstraint.constant = 0
     }
     //MARK: - Rounting Methods
     
@@ -121,31 +127,35 @@ class GameDetailsViewController: UIViewController, MKMapViewDelegate {
         return renderer
     }
     
-    //MARK: - XMLString Cleaning Methods
-    
-    func removeCharactersFromString(uncleanString:String, characterToRemove:String, characterReplacedBy:String){
-        
-        cleanString =  uncleanString.stringByReplacingOccurrencesOfString("\(characterToRemove)", withString: "\(characterReplacedBy)")
-        dirtyString = cleanString
-        
-        
+    //MARK: - Switch Functions
+    func switchPressed() {
+        let relation = currentlyViewedGame.relationForKey("User")
+        print(relation.description)
     }
     
-    func removeRange(searchStart:String, SearchEnd:String) {
-        if let rangeToRemove = dirtyString.rangeOfString("(?<=\(searchStart))[^\(SearchEnd)]+", options: .RegularExpressionSearch) {
-            let stringToRemove = dirtyString.substringWithRange(rangeToRemove)
-            print(stringToRemove)
-            let clean = dirtyString.stringByReplacingCharactersInRange(rangeToRemove, withString: "")
-            dirtyString = clean
-            cleanString = dirtyString
+    //MARK: - Parse Query
+    func QueryParseForCurrentGame() {
+        let query = PFQuery(className:"Games")
+        print("QueryGame title: \(selectedGame.Title)")
+        query.whereKey("Title", equalTo: "\(selectedGame.Title!)")
+        query.findObjectsInBackgroundWithBlock {
+            (objects: [PFObject]?, error: NSError?) -> Void in
+            
+            if error == nil {
+                // The find succeeded.
+                print("Successfully retrieved \(objects!.count) Games.")
+                // Do something with the found objects
+                if let objects = objects {
+                    for object in objects {
+                        print(object["Title"])
+                    }
+                }
+            } else {
+                // Log details of the failure
+                print("Error: \(error!) \(error!.userInfo)")
+            }
         }
-        
     }
-    
-    
-    
-    
-    
     //MARK: - Lifecycle Methods
     
     override func viewDidLoad() {
@@ -153,25 +163,13 @@ class GameDetailsViewController: UIViewController, MKMapViewDelegate {
         SingleGameMap.mapType = .Hybrid
         addGameToMap()
         centerMapOnSearch()
+        NavBarTitle.title = selectedGame.Title!
         
-        dirtyString = selectedGame.GameDescription as String
-        print(dirtyString)
-        removeCharactersFromString(dirtyString, characterToRemove: "<b>", characterReplacedBy: "")
-        removeCharactersFromString(dirtyString, characterToRemove: "</b>", characterReplacedBy: "")
-        removeCharactersFromString(dirtyString, characterToRemove: "<br />", characterReplacedBy: "\r\n")
-        removeCharactersFromString(dirtyString, characterToRemove: "</b>", characterReplacedBy: "")
-        removeCharactersFromString(dirtyString, characterToRemove: "<a>", characterReplacedBy: "")
-        removeCharactersFromString(dirtyString, characterToRemove: "</a>", characterReplacedBy: "")
+        GameDescription.font = UIFont(name: "Damascus", size: 20.0)
+        GameDescription.text = selectedGame.GameDescription
+        GameDescription.contentOffset = CGPoint.zero
+        QueryParseForCurrentGame()
         
-        
-        removeRange("Email:", SearchEnd: ">")
-        removeRange("Website:", SearchEnd: ">")
-        removeRange("List:", SearchEnd: ">")
-        
-        removeCharactersFromString(dirtyString, characterToRemove: ">", characterReplacedBy: " ")
-        
-        GameDescription.font = UIFont(name: "Damascus", size: 20.0) //not working
-        GameDescription.text = cleanString
         
         
         // Do any additional setup after loading the view.

@@ -93,6 +93,7 @@ class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpV
     
     @IBAction func removeKeyboard() {
         LocationSearchBar.resignFirstResponder()
+        LocationSearchBar.text = ""
     }
     
     func searchCity() {

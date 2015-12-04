@@ -70,6 +70,8 @@ class rssParser: NSObject, NSXMLParserDelegate {
         removeRange("Email:", SearchEnd: ">")
         removeRange("Website:", SearchEnd: ">")
         removeRange("List:", SearchEnd: ">")
+        
+        removeCharactersFromString(dirtyString, characterToRemove: ">", characterReplacedBy: "")
     }
     
     
@@ -173,6 +175,7 @@ class rssParser: NSObject, NSXMLParserDelegate {
                 newGame.GameDescription = string
                 dirtyString  = newGame.GameDescription //will this work?
                 cleaningString()
+                newGame.GameDescription = cleanString
             case "geo:lat":
                 let latCoords = Double(string)!
                 newGame.GameLat = latCoords
@@ -259,25 +262,18 @@ class rssParser: NSObject, NSXMLParserDelegate {
         query.findObjectsInBackgroundWithBlock {
             (objects: [PFObject]?, error: NSError?) -> Void in
             if error == nil {
-                // objects in results will only contain the playerName and score fields
             }
             var GameObjects = [PFObject]()
             GameObjects = objects!
-            //var gameTitle = PFObject()
-            //gameTitle = GameObjects["Title"]
-            //print("Title \(GameObjects["Title"])")
-            //let title = objects["Title"]
+           
             for title in GameObjects {
-                print("Title \(title["Title"])")
+               // print("Title \(title["Title"])")
                 if self.searchedGameArray.contains(title["Title"] as! String){
                     
                 } else {
                     self.searchedGameArray.append(title["Title"] as! String)
                 }
-                //print("test: \(test!["Title"])")
-                //searchedGameArray.append(objects)
-                //print("Object Description: \(objects?.description)")
-                //print("stuff found on Parse: \(objects) END")
+              
             }
             
             
