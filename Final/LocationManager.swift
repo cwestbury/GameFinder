@@ -25,6 +25,8 @@ class LocationManager: NSObject, CLLocationManagerDelegate, MKMapViewDelegate {
     var searchedCityLat: Double!
     var searchedCityLong: Double!
     
+    //MARK: - Location Searching
+    
     func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         
         if (userLocationCoordinates.latitude == 0 && userLocationCoordinates.longitude == 0) {

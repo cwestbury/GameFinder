@@ -64,6 +64,14 @@ class serverManager: NSObject {
     func placeLocationsOnMap(gameArray: [PFObject]) {
         for game in gameArray {
             let loc = game["GameCoords"] as! PFGeoPoint
+           // let coords1 = [loc.latitude, loc.longitude]
+            
+//            let gamePin = MKPointAnnotation()
+//            let coords = CLLocationCoordinate2DMake(loc.latitude, loc.longitude)
+//            gamePin.coordinate = coords
+//            gamePin.title = game["Title"] as? String
+//            map.addAnnotation(gamePin)
+            print("Lat:\(loc.latitude) Lon:\(loc.longitude)")
             
         }
     }

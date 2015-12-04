@@ -31,7 +31,21 @@ class rssParser: NSObject, NSXMLParserDelegate {
     func searchedNSURLString(SeachedCity: String) {
         let dirtyString = SeachedCity
         
-        let cleanString = dirtyString.lowercaseString.stringByReplacingOccurrencesOfString(" ", withString: "")
+        var cleanString = dirtyString.lowercaseString.stringByReplacingOccurrencesOfString(" ", withString: "")
+        print(cleanString)
+        if cleanString == "washington" {
+            cleanString = "washingtonDC"
+        }
+        if cleanString == "newyork"{
+            cleanString = "nyc"
+        }
+        if cleanString == "newyorkcity"{
+            cleanString = "nyc"
+        }
+        if cleanString == "sanfrancisco"{
+            cleanString = "sfbayarea"
+        }
+        print(cleanString)
         searchedUrlString = NSURL(string: "http://pickupultimate.com/rss/city/\(cleanString)")!
         print("City to Parse! - \(searchedUrlString)")
     }

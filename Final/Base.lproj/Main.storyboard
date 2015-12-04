@@ -242,7 +242,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <searchBar contentMode="redraw" placeholder="Search a Location" translatesAutoresizingMaskIntoConstraints="NO" id="6uq-Yq-sRg">
+                            <searchBar contentMode="redraw" placeholder="Search a Location or Zip Code" translatesAutoresizingMaskIntoConstraints="NO" id="6uq-Yq-sRg">
                                 <rect key="frame" x="0.0" y="64" width="600" height="44"/>
                                 <animations/>
                                 <textInputTraits key="textInputTraits" autocapitalizationType="words" autocorrectionType="yes" spellCheckingType="yes" returnKeyType="search"/>
@@ -253,8 +253,10 @@
                             <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="EhV-dc-1ot">
                                 <rect key="frame" x="0.0" y="108" width="600" height="556"/>
                                 <animations/>
+                                <gestureRecognizers/>
                                 <connections>
                                     <outlet property="delegate" destination="BYZ-38-t0r" id="lmc-oV-81K"/>
+                                    <outletCollection property="gestureRecognizers" destination="hxR-Vm-GwI" appends="YES" id="1Cv-TV-2Mk"/>
                                 </connections>
                             </mapView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="zR4-TQ-vbI">
@@ -314,6 +316,11 @@
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
+                <tapGestureRecognizer id="hxR-Vm-GwI">
+                    <connections>
+                        <action selector="removeKeyboard" destination="BYZ-38-t0r" id="kfm-2j-lKl"/>
+                    </connections>
+                </tapGestureRecognizer>
             </objects>
             <point key="canvasLocation" x="1057" y="309"/>
         </scene>

@@ -37,9 +37,9 @@ class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpV
             presentViewController(viewcont, animated: true, completion: nil)
         }
     }
-        
     
-    //MARK: - Login Methods
+    
+    //MARK: - Parse Login Methods
     
     @IBAction func loginButtonPresesd(sender:UIBarButtonItem) {
         if let _ = PFUser.currentUser() {
@@ -72,16 +72,27 @@ class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpV
         dismissViewControllerAnimated(true, completion: nil)
     }
     
-    //MARK: - Search Bar Methods 
+    //MARK: - Search Bar Methods
     
     func searchBarSearchButtonClicked(searchBar: UISearchBar) {
         if LocationSearchBar.text != nil {
-            locManger.getSearchedLocation(LocationSearchBar.text!)
-           // searchedCity = locManger.searchedCity
+            var textToSearch = LocationSearchBar.text!
+            textToSearch = textToSearch.lowercaseString
+            
+            if textToSearch == "dc" {
+                textToSearch = "washingtonDC"
+            }
+            print("input text: \(textToSearch)")
+            locManger.getSearchedLocation(textToSearch)
+            // searchedCity = locManger.searchedCity
             //print(searchedCity)
-           // RSSParser.searchedNSURLString(locManger.searchedCity)
+            // RSSParser.searchedNSURLString(locManger.searchedCity)
             searchBar.resignFirstResponder()
         }
+    }
+    
+    @IBAction func removeKeyboard() {
+        LocationSearchBar.resignFirstResponder()
     }
     
     func searchCity() {
@@ -126,20 +137,24 @@ class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpV
         selectedGame = annotation.pinGame
         self .performSegueWithIdentifier("gameDetailSegue", sender: self)
     }
+
     
-////    func placeLocationsOnMapViaParse(gameArray:[PFObject]) {
-////        for game in gameArray {
-////            let loc = game["GameCoords"] as! PFGeoPoint
-////            let gamePin = GamePointAnnotation()
-////            let coords = CLLocationCoordinate2DMake(loc.latitude, loc.longitude)
-////            gamePin.coordinate = coords
-////            gamePin.title = game["Title"] as? String
-////            //gamePin.subtitle = game["Descritpion"] as? String
-//    
-//            
-//            gameMap.addAnnotation(gamePin)
-//        }
-//    }
+    
+    //MARK: - KEEP FOR LATER????
+    
+    ////    func placeLocationsOnMapViaParse(gameArray:[PFObject]) {
+    ////        for game in gameArray {
+    ////            let loc = game["GameCoords"] as! PFGeoPoint
+    ////            let gamePin = GamePointAnnotation()
+    ////            let coords = CLLocationCoordinate2DMake(loc.latitude, loc.longitude)
+    ////            gamePin.coordinate = coords
+    ////            gamePin.title = game["Title"] as? String
+    ////            //gamePin.subtitle = game["Descritpion"] as? String
+    //
+    //
+    //            gameMap.addAnnotation(gamePin)
+    //        }
+    //    }
     
     func removePins() {
         var pins: [MKAnnotation] = NSArray(array: gameMap.annotations) as! [MKAnnotation]
@@ -157,26 +172,32 @@ class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpV
     func addGamesToMap() {
         print("adding XML parsed Games")
         //let GamesToParse = Games()
-        removePins() //NOTE THIS IS REMOVING THE ADDED GAMES AS WELL
+        removePins()
         for GamesToParse in RSSParser.gameArray {
-           // print("For Loop \(GamesToParse.Title) lat \(GamesToParse.GameLat) lon \(GamesToParse.GameLong)")
+            // print("For Loop \(GamesToParse.Title) lat \(GamesToParse.GameLat) lon \(GamesToParse.GameLong)")
             locManger.addMapPins(gameMap, lat: GamesToParse.GameLat, long: GamesToParse.GameLong, Title: GamesToParse.Title, game: GamesToParse)
         }
+        if RSSParser.gameArray.count == 0 {
+            alertView()
+        }
     }
+    func alertView() {
+        let alert = UIAlertController(title: "😭😭😭", message: "No games found in \(searchBarCity)", preferredStyle: UIAlertControllerStyle.Alert)
+        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil))
+        self.presentViewController(alert, animated: true, completion: nil)
+    }
+
     //MARK: - Segue Methods
     
     
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if (segue.identifier == "gameDetailSegue"){
-           let destController = segue.destinationViewController as! GameDetailsViewController
+            let destController = segue.destinationViewController as! GameDetailsViewController
             destController.selectedGame = selectedGame
             
         }
     }
-    
-    
-    
     
     //MARK: - LifeCycle Methods
     
@@ -185,24 +206,21 @@ class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpV
         locManger.setUpLocationMonitoring()
         gameMap.showsUserLocation = true
         centerMapView()
-        removePins()
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "currentLocationRecieved", name: "recievedLocationFromUser", object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "addGamesToMap", name: "parsedGameData", object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "searchCity", name: "recievedSearchedCityFromUser", object: nil)
         
         //servManger.getGameLocation()
-
+        
     }
     
     override func viewDidAppear(animated: Bool) {
         //placeLocationsOnMapViaParse(servManger.gameArray)
     }
     override func viewDidDisappear(animated: Bool) {
-       // gameMap.removeAnnotation()
+        // gameMap.removeAnnotation()
     }
-    
-    
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()

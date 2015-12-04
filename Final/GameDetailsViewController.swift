@@ -17,6 +17,7 @@ class GameDetailsViewController: UIViewController, MKMapViewDelegate {
     @IBOutlet var GameDescription: UITextView!
     @IBOutlet var mapController: UISegmentedControl!
     @IBOutlet var bottomConstraint: NSLayoutConstraint!
+    
     let locManager = LocationManager.sharedInstance
     var selectedGame :Games!
     var emailCleanedString :String!
@@ -25,6 +26,22 @@ class GameDetailsViewController: UIViewController, MKMapViewDelegate {
     var dirtyString: String!
     
     //MARK: - Map Functions
+    
+    func openMap(){
+        
+        let regionDistance:CLLocationDistance = 10000
+        let coordinates = CLLocationCoordinate2DMake(selectedGame.GameLat, selectedGame.GameLong)
+        let regionSpan = MKCoordinateRegionMakeWithDistance(coordinates, regionDistance, regionDistance)
+        let options = [
+            MKLaunchOptionsMapCenterKey: NSValue(MKCoordinate: regionSpan.center),
+            MKLaunchOptionsMapSpanKey: NSValue(MKCoordinateSpan: regionSpan.span)
+        ]
+        let placemark = MKPlacemark(coordinate: coordinates, addressDictionary: nil)
+        let mapItem = MKMapItem(placemark: placemark)
+        mapItem.name = "\(selectedGame.Title!)"
+        mapItem.openInMapsWithLaunchOptions(options)
+
+    }
     
     func mapView(mapView: MKMapView, viewForAnnotation annotation: MKAnnotation) -> MKAnnotationView? {
         if annotation.isMemberOfClass(MKUserLocation.self) {
@@ -71,7 +88,8 @@ class GameDetailsViewController: UIViewController, MKMapViewDelegate {
     }
     
     func mapView(mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
-        route()
+        //route()
+        openMap()
         bottomConstraint.constant = 0
     }
     //MARK: - Rounting Methods
@@ -138,6 +156,7 @@ class GameDetailsViewController: UIViewController, MKMapViewDelegate {
         centerMapOnSearch()
         
         dirtyString = selectedGame.GameDescription as String
+        print(dirtyString)
         removeCharactersFromString(dirtyString, characterToRemove: "<b>", characterReplacedBy: "")
         removeCharactersFromString(dirtyString, characterToRemove: "</b>", characterReplacedBy: "")
         removeCharactersFromString(dirtyString, characterToRemove: "<br />", characterReplacedBy: "\r\n")
