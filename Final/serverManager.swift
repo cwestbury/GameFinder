@@ -30,12 +30,14 @@ class serverManager: NSObject {
     }
     
     func saveGameFromWebsite(title:String, gameDescription:String, gameLat:Double, gameLong:Double){
-        print("Saving \(title)")
         let newGame = PFObject(className: "Games")
         newGame["Title"] = title
         newGame["GameDescprition"] = gameDescription
+        //newGame["City"] = gameCity
+        //print("City Name:\(gameCity)")
         let GeoPoint = PFGeoPoint(latitude: gameLat, longitude: gameLong)
         newGame["GameCoords"] = GeoPoint
+        
         newGame.saveInBackground()
     }
     

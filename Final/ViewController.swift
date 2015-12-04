@@ -203,6 +203,7 @@ class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpV
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        RSSParser.queryParseForGames()
         locManger.setUpLocationMonitoring()
         gameMap.showsUserLocation = true
         centerMapView()

@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Parse
 
 class rssParser: NSObject, NSXMLParserDelegate {
     
@@ -21,13 +22,18 @@ class rssParser: NSObject, NSXMLParserDelegate {
     
     var gameArray = [Games]()
     var newGame = Games()
+    
+    var searchedGameSavedToParse = String()
+    var searchedGameArray = [String]()
+    
     var city = String()
+    
     var searchedUrlString = NSURL()
     var currentLocationUrlString = NSURL()
     var rssUrlRequest = NSURLRequest()
     
-    var cleanString: String!
-    var dirtyString: String!
+    var cleanString = String()
+    var dirtyString = String()
     
     
     
@@ -43,8 +49,8 @@ class rssParser: NSObject, NSXMLParserDelegate {
     
     func removeRange(searchStart:String, SearchEnd:String) {
         if let rangeToRemove = dirtyString.rangeOfString("(?<=\(searchStart))[^\(SearchEnd)]+", options: .RegularExpressionSearch) {
-            let stringToRemove = dirtyString.substringWithRange(rangeToRemove)
-            print(stringToRemove)
+            //let stringToRemove = dirtyString.substringWithRange(rangeToRemove)
+            //print(stringToRemove)
             let clean = dirtyString.stringByReplacingCharactersInRange(rangeToRemove, withString: "")
             dirtyString = clean
             cleanString = dirtyString
@@ -71,34 +77,38 @@ class rssParser: NSObject, NSXMLParserDelegate {
     //MARK: - XML Parsing Methods
     
     func searchedNSURLString(SeachedCity: String) {
-        let dirtyString = SeachedCity
+        let dirtyCityString = SeachedCity
         
-        var cleanString = dirtyString.lowercaseString.stringByReplacingOccurrencesOfString(" ", withString: "")
-        print(cleanString)
-        if cleanString == "washington" {
-            cleanString = "washingtonDC"
+        var cleanCityString = dirtyCityString.lowercaseString.stringByReplacingOccurrencesOfString(" ", withString: "")
+        print(cleanCityString)
+        if cleanCityString == "washington" {
+            cleanCityString = "washingtonDC"
         }
-        if cleanString == "newyork"{
-            cleanString = "nyc"
+        if cleanCityString == "newyork"{
+            cleanCityString = "nyc"
         }
-        if cleanString == "newyorkcity"{
-            cleanString = "nyc"
+        if cleanCityString == "newyorkcity"{
+            cleanCityString = "nyc"
         }
-        if cleanString == "sanfrancisco"{
-            cleanString = "sfbayarea"
+        if cleanCityString == "sanfrancisco"{
+            cleanCityString = "sfbayarea"
         }
-        print(cleanString)
-        searchedUrlString = NSURL(string: "http://pickupultimate.com/rss/city/\(cleanString)")!
+        print(cleanCityString)
+        
+        searchedUrlString = NSURL(string: "http://pickupultimate.com/rss/city/\(cleanCityString)")!
         print("City to Parse! - \(searchedUrlString)")
     }
     
     func currentLocationNSURLString(){
-        city = LocManager.userCity
+        //city = LocManager.userCity
+        city = "annarbor"
         if city == "Washington" {
             city = "WashingtonDC"
         }
-        //currentLocationUrlString = NSURL(string: "http://pickupultimate.com/rss/city/\(city)")!
-        currentLocationUrlString = NSURL(string: "http://pickupultimate.com/rss/city/annarbor")!
+        
+        
+        currentLocationUrlString = NSURL(string: "http://pickupultimate.com/rss/city/\(city)")!
+        // currentLocationUrlString = NSURL(string: "http://pickupultimate.com/rss/city/annarbor")!
         
         
     }
@@ -195,14 +205,86 @@ class rssParser: NSObject, NSXMLParserDelegate {
         if elementName == "item" {
             //print(newGame.Title)
             gameArray.append(newGame)
-            print("new game:\(newGame.Title)") //prints 3 games?
-            //print("Clean Sting Starts here: \(cleanString)")
             
-            servManager.saveGameFromWebsite(newGame.Title, gameDescription: cleanString, gameLat: newGame.GameLat, gameLong: newGame.GameLong) //but this only saves the last game?
-     
+            //searchedGameSavedToParse = newGame.Title
+            
+            print("seached Game: \(searchedGameSavedToParse)")
+            
+            print("Search Array Before Current Loc Search: \(searchedGameArray)")
+            if searchedGameArray.contains(newGame.Title) {
+                print("Game already on parse")
+            }else {
+                searchedGameArray.append(newGame.Title)
+                servManager.saveGameFromWebsite(newGame.Title, gameDescription: cleanString, gameLat: newGame.GameLat, gameLong: newGame.GameLong)
+                print("addGame to parse")
+            }
+            
+            
+            //checkForGames(searchedGameSavedToParse, SearchedGameArray: searchedGameArray)
+            
+            print("Search Array After Current Loc Search: \(searchedGameArray)")
+            
+            
+            
+            //servManager.saveGameFromWebsite(newGame.Title, gameDescription: cleanString, gameLat: newGame.GameLat, gameLong: newGame.GameLong)
+            //servManager.saveGameFromWebsite(newGame.Title, gameDescription: cleanString, gameCity: searchedCitySavedToParse, gameLat: newGame.GameLat, gameLong: newGame.GameLong) //but this only saves the last game?
+            
             parsingAnItem = false
         }
     }
+    
+    func checkForGames(gameTitle: String, var SearchedGameArray: [String]){
+        if  SearchedGameArray.contains(gameTitle){
+            print("game Name: \(gameTitle) already stored")
+            //print("game already stored")
+            // new game
+        } else {
+            let gameToStore = gameTitle
+            print("game Name: \(gameToStore)")
+            SearchedGameArray.append(gameToStore)
+            print("Array: \(searchedGameArray)")
+            servManager.saveGameFromWebsite(newGame.Title, gameDescription: cleanString, gameLat: newGame.GameLat, gameLong: newGame.GameLong)
+            print("game stored")
+            
+        }
+        
+        //already found game
+        
+    }
+    
+    func queryParseForGames() {
+        let query = PFQuery(className:"Games")
+        query.selectKeys(["Title"])
+        print("ParseQueryRunning")
+        query.findObjectsInBackgroundWithBlock {
+            (objects: [PFObject]?, error: NSError?) -> Void in
+            if error == nil {
+                // objects in results will only contain the playerName and score fields
+            }
+            var GameObjects = [PFObject]()
+            GameObjects = objects!
+            //var gameTitle = PFObject()
+            //gameTitle = GameObjects["Title"]
+            //print("Title \(GameObjects["Title"])")
+            //let title = objects["Title"]
+            for title in GameObjects {
+                print("Title \(title["Title"])")
+                if self.searchedGameArray.contains(title["Title"] as! String){
+                    
+                } else {
+                    self.searchedGameArray.append(title["Title"] as! String)
+                }
+                //print("test: \(test!["Title"])")
+                //searchedGameArray.append(objects)
+                //print("Object Description: \(objects?.description)")
+                //print("stuff found on Parse: \(objects) END")
+            }
+            
+            
+        }
+    }
+    
+    
     
     func parserDidEndDocument(parser: NSXMLParser) {
         dispatch_async(dispatch_get_main_queue(), { () -> Void in
