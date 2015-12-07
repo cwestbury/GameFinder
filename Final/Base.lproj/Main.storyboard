@@ -459,7 +459,7 @@
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <animations/>
                                 <connections>
-                                    <action selector="switchPressed" destination="NEi-T6-JKQ" eventType="valueChanged" id="We5-cu-16V"/>
+                                    <action selector="switchPressed:" destination="NEi-T6-JKQ" eventType="touchUpInside" id="08r-mA-IMF"/>
                                 </connections>
                             </switch>
                             <connections>
@@ -471,7 +471,7 @@
                         <outlet property="GameDescription" destination="b3c-0T-IvS" id="fU8-vy-SGC"/>
                         <outlet property="NavBarTitle" destination="1gh-FX-Xch" id="54h-hV-UJ6"/>
                         <outlet property="SingleGameMap" destination="cG2-IG-aGL" id="fDu-dN-w32"/>
-                        <outlet property="attendanceSwtich" destination="XXR-Eh-MEI" id="Zu3-e2-JKq"/>
+                        <outlet property="attendanceSwitch" destination="XXR-Eh-MEI" id="xpR-8R-1gc"/>
                         <outlet property="playersTableView" destination="o2R-67-tUb" id="ImZ-8M-J51"/>
                     </connections>
                 </viewController>

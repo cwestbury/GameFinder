@@ -40,6 +40,14 @@ class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpV
     
     
     //MARK: - Parse Login Methods
+    func checkForLogin(){
+        if PFUser.currentUser() == nil {
+            loginButton.title = "Login"
+                        
+        } else {
+            loginButton.title = "Logout"
+        }
+    }
     
     @IBAction func loginButtonPresesd(sender:UIBarButtonItem) {
         if let _ = PFUser.currentUser() {
@@ -139,24 +147,6 @@ class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpV
         performSegueWithIdentifier("gameDetailSegue", sender: self)
     }
 
-    
-    
-    //MARK: - KEEP FOR LATER????
-    
-    ////    func placeLocationsOnMapViaParse(gameArray:[PFObject]) {
-    ////        for game in gameArray {
-    ////            let loc = game["GameCoords"] as! PFGeoPoint
-    ////            let gamePin = GamePointAnnotation()
-    ////            let coords = CLLocationCoordinate2DMake(loc.latitude, loc.longitude)
-    ////            gamePin.coordinate = coords
-    ////            gamePin.title = game["Title"] as? String
-    ////            //gamePin.subtitle = game["Descritpion"] as? String
-    //
-    //
-    //            gameMap.addAnnotation(gamePin)
-    //        }
-    //    }
-    
     func removePins() {
         var pins: [MKAnnotation] = NSArray(array: gameMap.annotations) as! [MKAnnotation]
         gameMap.removeAnnotations(pins)
@@ -199,6 +189,21 @@ class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpV
             
         }
     }
+    //MARK: - KEEP FOR LATER????
+    
+    ////    func placeLocationsOnMapViaParse(gameArray:[PFObject]) {
+    ////        for game in gameArray {
+    ////            let loc = game["GameCoords"] as! PFGeoPoint
+    ////            let gamePin = GamePointAnnotation()
+    ////            let coords = CLLocationCoordinate2DMake(loc.latitude, loc.longitude)
+    ////            gamePin.coordinate = coords
+    ////            gamePin.title = game["Title"] as? String
+    ////            //gamePin.subtitle = game["Descritpion"] as? String
+    //
+    //
+    //            gameMap.addAnnotation(gamePin)
+    //        }
+    //    }
     
     //MARK: - LifeCycle Methods
     

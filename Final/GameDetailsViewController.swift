@@ -19,6 +19,7 @@ class GameDetailsViewController: UIViewController, MKMapViewDelegate, UITableVie
     @IBOutlet var playersTableView: UITableView!
     var playersArray  = [Player]()
     var playerObject = Player()
+    var playerNameArray  = [String]()
     
     @IBOutlet var SingleGameMap: MKMapView!
     @IBOutlet var GameDescription: UITextView!
@@ -41,38 +42,48 @@ class GameDetailsViewController: UIViewController, MKMapViewDelegate, UITableVie
     @IBAction func switchPressed(sender:UISwitch) {
        let relation = parseGame.relationForKey("User")
         if attendanceSwitch.on {
-            
-            
-        } else {
-            
             relation.addObject(currentUser!)
-            print("added \(currentUser!["Name"] as! String)")
-            
+            print("added: \(currentUser!["Name"] as! String) to Game List")
+        } else {
+            relation.removeObject(currentUser!)
+            playerNameArray.removeLast() // FIGURE OUT A BETTER WAY
+            print("Removed: \(currentUser!["Name"] as! String) From Game List")
+        
         }
         
-        parseGame.saveInBackground()
-        QueryGamesForPlayers()
-        
+        parseGame.saveInBackgroundWithBlock { (Bool, error) -> Void in
+             self.QueryGamesForPlayers()
+            self.playersTableView.reloadData()
+        }
+        //viewDidLoad()
+    }
+    
+    func setSwitchState() {
+        let currentUserName = currentUser!["Name"] as! String
+        if playerNameArray.contains(currentUserName) {
+            attendanceSwitch.on = true
+        } else {
+            attendanceSwitch.on = false
+        }
     }
     
     
     
-    //MARK: - TableViewMethods
+    //MARK: - TableView Methods
+    func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return "Attending This Week"
+    }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        if playersArray.count != 0 {
-            let cell = tableView.dequeueReusableCellWithIdentifier("cell")! as UITableViewCell
+        let cell = tableView.dequeueReusableCellWithIdentifier("cell")! as UITableViewCell
+        
+        //if playersArray.count != 0 {
             cell.textLabel?.text = playersArray[indexPath.row].playerName
             cell.imageView?.image = playersArray[indexPath.row].playerImage
             playersTableView.hidden = false
             print("Displaying Players")
+            //print("\(player)")
             return cell
-        } else {
-            let cell = tableView.dequeueReusableCellWithIdentifier("cell")! as UITableViewCell
-            playersTableView.hidden = true
-            print("No Players to Display")
-            return cell
-        }
         
     }
     
@@ -127,21 +138,6 @@ class GameDetailsViewController: UIViewController, MKMapViewDelegate, UITableVie
         locManager.addMapPins(SingleGameMap, lat: selectedGame.GameLat, long: selectedGame.GameLong, Title: "Route", game: selectedGame)
     }
     
-    //    @IBAction func selectedSegmentChanged(sender:UISegmentedControl){
-    //        switch mapController.selectedSegmentIndex
-    //        {
-    //        case 0:
-    //            SingleGameMap.mapType = .Hybrid
-    //        case 1:
-    //            SingleGameMap.mapType = .Standard
-    //        case 2:
-    //            centerMapOnSearch()
-    //        default:
-    //            break
-    //
-    //        }
-    //
-    //    }
     
     func mapView(mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
         //route()
@@ -210,6 +206,8 @@ class GameDetailsViewController: UIViewController, MKMapViewDelegate, UITableVie
             if error == nil {
                 for player in players! {
                     self.playerObject.playerName = player["Name"] as! String
+                    self.playerNameArray.append(player["Name"] as! String)
+                    //print("PlayerNamesArray: \(self.playerNameArray)")
                     
                     let imageFile = (player["imageFile"] as! PFFile)
                     imageFile.getDataInBackgroundWithBlock {
@@ -235,6 +233,7 @@ class GameDetailsViewController: UIViewController, MKMapViewDelegate, UITableVie
                 }
                 self.playersTableView.reloadData()
                 print("Successfully retrieved \(players!.count) Players.")
+                self.setSwitchState()
                 
             } else {
                 print("Error: \(error!) \(error!.userInfo)")
