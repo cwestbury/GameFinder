@@ -25,7 +25,7 @@ class GameDetailsViewController: UIViewController, MKMapViewDelegate, UITableVie
     //@IBOutlet var mapController: UISegmentedControl!
     //@IBOutlet var bottomConstraint: NSLayoutConstraint!
     @IBOutlet var NavBarTitle: UINavigationItem!
-    @IBOutlet var attendanceSwtich: UISwitch!
+    @IBOutlet var attendanceSwitch: UISwitch!
     
     let locManager = LocationManager.sharedInstance
     var selectedGame :Games!
@@ -38,11 +38,20 @@ class GameDetailsViewController: UIViewController, MKMapViewDelegate, UITableVie
     
     //MARK: - Switch Functions
     
-    @IBAction func switchPressed() {
-        let relation = parseGame.relationForKey("User")
-        relation.addObject(currentUser!)
-        print("added \(currentUser!["Name"] as! String)")
+    @IBAction func switchPressed(sender:UISwitch) {
+       let relation = parseGame.relationForKey("User")
+        if attendanceSwitch.on {
+            
+            
+        } else {
+            
+            relation.addObject(currentUser!)
+            print("added \(currentUser!["Name"] as! String)")
+            
+        }
+        
         parseGame.saveInBackground()
+        QueryGamesForPlayers()
         
     }
     
@@ -54,7 +63,7 @@ class GameDetailsViewController: UIViewController, MKMapViewDelegate, UITableVie
         if playersArray.count != 0 {
             let cell = tableView.dequeueReusableCellWithIdentifier("cell")! as UITableViewCell
             cell.textLabel?.text = playersArray[indexPath.row].playerName
-            //cell.imageView?.image = playersArray[indexPath.row].playerImage
+            cell.imageView?.image = playersArray[indexPath.row].playerImage
             playersTableView.hidden = false
             print("Displaying Players")
             return cell
@@ -201,21 +210,30 @@ class GameDetailsViewController: UIViewController, MKMapViewDelegate, UITableVie
             if error == nil {
                 for player in players! {
                     self.playerObject.playerName = player["Name"] as! String
-                    //self.playerObject.playerImage = player["imageFile"] as! UIImage
+                    
+                    let imageFile = (player["imageFile"] as! PFFile)
+                    imageFile.getDataInBackgroundWithBlock {
+                        (imageData: NSData?, error: NSError?) -> Void in
+                        if error == nil {
+                            if let imageData = imageData {
+                                self.playerObject.playerImage = UIImage(data:imageData)
+                                self.playersTableView.reloadData()
+                            }
+                        } else {
+                            print("No Image Found")
+                        }
+                    }
                     
                     if self.playersArray.contains(self.playerObject) {
-                        print("Already contains \(player["Name"])")
+                        print("Already contains: \(player["Name"])")
                     } else {
                         self.playersArray.append(self.playerObject)
                         print("Added: \(player["Name"])")
                     }
-                    self.playersTableView.reloadData()
                     
                     //print(self.playersArray)
                 }
-                
-                
-                
+                self.playersTableView.reloadData()
                 print("Successfully retrieved \(players!.count) Players.")
                 
             } else {
@@ -224,6 +242,8 @@ class GameDetailsViewController: UIViewController, MKMapViewDelegate, UITableVie
             
         }
     }
+    
+    
     
     
     
@@ -240,7 +260,7 @@ class GameDetailsViewController: UIViewController, MKMapViewDelegate, UITableVie
         GameDescription.text = selectedGame.GameDescription
         GameDescription.contentOffset = CGPoint.zero
         QueryParseForCurrentGame()
-        print("Players Array Count: \(playersArray.count)")
+        //print("Players Array Count: \(playersArray.count)")
         
         
         
