@@ -13,10 +13,12 @@ import Parse
 
 class GameDetailsViewController: UIViewController, MKMapViewDelegate, UITableViewDataSource, UITableViewDelegate {
     
+    
     //MARK: - Properties
     
     @IBOutlet var playersTableView: UITableView!
     var playersArray  = [Player]()
+    var playerObject = Player()
     
     @IBOutlet var SingleGameMap: MKMapView!
     @IBOutlet var GameDescription: UITextView!
@@ -27,12 +29,24 @@ class GameDetailsViewController: UIViewController, MKMapViewDelegate, UITableVie
     
     let locManager = LocationManager.sharedInstance
     var selectedGame :Games!
-
+    
     var cleanString: String!
     var dirtyString: String!
     
     let currentUser = PFUser.currentUser()
-    let currentlyViewedGame = PFObject(className: "Games")
+    var parseGame = PFObject(className: "Games")
+    
+    //MARK: - Switch Functions
+    
+    @IBAction func switchPressed() {
+        let relation = parseGame.relationForKey("User")
+        relation.addObject(currentUser!)
+        print("added \(currentUser!["Name"] as! String)")
+        parseGame.saveInBackground()
+        
+    }
+    
+    
     
     //MARK: - TableViewMethods
     
@@ -40,7 +54,7 @@ class GameDetailsViewController: UIViewController, MKMapViewDelegate, UITableVie
         if playersArray.count != 0 {
             let cell = tableView.dequeueReusableCellWithIdentifier("cell")! as UITableViewCell
             cell.textLabel?.text = playersArray[indexPath.row].playerName
-            cell.imageView?.image = playersArray[indexPath.row].playerImage
+            //cell.imageView?.image = playersArray[indexPath.row].playerImage
             playersTableView.hidden = false
             print("Displaying Players")
             return cell
@@ -73,7 +87,7 @@ class GameDetailsViewController: UIViewController, MKMapViewDelegate, UITableVie
         let mapItem = MKMapItem(placemark: placemark)
         mapItem.name = "\(selectedGame.Title!)"
         mapItem.openInMapsWithLaunchOptions(options)
-
+        
     }
     
     func mapView(mapView: MKMapView, viewForAnnotation annotation: MKAnnotation) -> MKAnnotationView? {
@@ -104,21 +118,21 @@ class GameDetailsViewController: UIViewController, MKMapViewDelegate, UITableVie
         locManager.addMapPins(SingleGameMap, lat: selectedGame.GameLat, long: selectedGame.GameLong, Title: "Route", game: selectedGame)
     }
     
-//    @IBAction func selectedSegmentChanged(sender:UISegmentedControl){
-//        switch mapController.selectedSegmentIndex
-//        {
-//        case 0:
-//            SingleGameMap.mapType = .Hybrid
-//        case 1:
-//            SingleGameMap.mapType = .Standard
-//        case 2:
-//            centerMapOnSearch()
-//        default:
-//            break
-//            
-//        }
-//        
-//    }
+    //    @IBAction func selectedSegmentChanged(sender:UISegmentedControl){
+    //        switch mapController.selectedSegmentIndex
+    //        {
+    //        case 0:
+    //            SingleGameMap.mapType = .Hybrid
+    //        case 1:
+    //            SingleGameMap.mapType = .Standard
+    //        case 2:
+    //            centerMapOnSearch()
+    //        default:
+    //            break
+    //
+    //        }
+    //
+    //    }
     
     func mapView(mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
         //route()
@@ -155,15 +169,10 @@ class GameDetailsViewController: UIViewController, MKMapViewDelegate, UITableVie
         return renderer
     }
     
-    //MARK: - Switch Functions
-    @IBAction func switchPressed() {
-        let currentUser = PFUser.currentUser()
-        let relation = currentlyViewedGame.relationForKey("User")
-        relation.addObject(currentUser!)
-        print("added \(currentUser!["Name"] as! String)")
-    }
     
-    //MARK: - Parse Query
+    
+    //MARK: - Parse Query Methods
+    
     func QueryParseForCurrentGame() {
         let query = PFQuery(className:"Games")
         print("QueryGame title: \(selectedGame.Title)")
@@ -172,13 +181,11 @@ class GameDetailsViewController: UIViewController, MKMapViewDelegate, UITableVie
             (objects: [PFObject]?, error: NSError?) -> Void in
             
             if error == nil {
-                // The find succeeded.
                 print("Successfully retrieved \(objects!.count) Games.")
-                // Do something with the found objects
-                if let objects = objects {
-                    for object in objects {
-                        print(object["Title"])
-                    }
+                if let uObjects = objects {
+                    self.parseGame = uObjects[0]
+                    self.QueryGamesForPlayers()
+                    print("Current ParseGame: \(self.parseGame["Title"])")
                 }
             } else {
                 // Log details of the failure
@@ -186,6 +193,40 @@ class GameDetailsViewController: UIViewController, MKMapViewDelegate, UITableVie
             }
         }
     }
+    
+    func QueryGamesForPlayers() {
+        let relation = parseGame.relationForKey("User")
+        let query = relation.query()
+        query.findObjectsInBackgroundWithBlock { (players, error) -> Void in
+            if error == nil {
+                for player in players! {
+                    self.playerObject.playerName = player["Name"] as! String
+                    //self.playerObject.playerImage = player["imageFile"] as! UIImage
+                    
+                    if self.playersArray.contains(self.playerObject) {
+                        print("Already contains \(player["Name"])")
+                    } else {
+                        self.playersArray.append(self.playerObject)
+                        print("Added: \(player["Name"])")
+                    }
+                    self.playersTableView.reloadData()
+                    
+                    //print(self.playersArray)
+                }
+                
+                
+                
+                print("Successfully retrieved \(players!.count) Players.")
+                
+            } else {
+                print("Error: \(error!) \(error!.userInfo)")
+            }
+            
+        }
+    }
+    
+    
+    
     //MARK: - Lifecycle Methods
     
     override func viewDidLoad() {
@@ -200,6 +241,7 @@ class GameDetailsViewController: UIViewController, MKMapViewDelegate, UITableVie
         GameDescription.contentOffset = CGPoint.zero
         QueryParseForCurrentGame()
         print("Players Array Count: \(playersArray.count)")
+        
         
         
         

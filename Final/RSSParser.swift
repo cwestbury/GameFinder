@@ -213,7 +213,7 @@ class rssParser: NSObject, NSXMLParserDelegate {
             
             print("seached Game: \(searchedGameSavedToParse)")
             
-            print("Search Array Before Current Loc Search: \(searchedGameArray)")
+            print("Search Array  count Before Current Loc Search: \(searchedGameArray.count)")
             if searchedGameArray.contains(newGame.Title) {
                 print("Game already on parse")
             }else {
@@ -225,7 +225,7 @@ class rssParser: NSObject, NSXMLParserDelegate {
             
             //checkForGames(searchedGameSavedToParse, SearchedGameArray: searchedGameArray)
             
-            print("Search Array After Current Loc Search: \(searchedGameArray)")
+            print("Search Array count After Current Loc Search: \(searchedGameArray.count)")
             
             
             
@@ -267,7 +267,7 @@ class rssParser: NSObject, NSXMLParserDelegate {
             GameObjects = objects!
            
             for title in GameObjects {
-               // print("Title \(title["Title"])")
+//                print("Title \(title["Title"])")
                 if self.searchedGameArray.contains(title["Title"] as! String){
                     
                 } else {

@@ -136,7 +136,7 @@ class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpV
         //servManager.saveGeoPoint(newGameLat, long: newGameLong)
         let annotation = view.annotation as! GamePointAnnotation
         selectedGame = annotation.pinGame
-        self .performSegueWithIdentifier("gameDetailSegue", sender: self)
+        performSegueWithIdentifier("gameDetailSegue", sender: self)
     }
 
     
