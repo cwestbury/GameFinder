@@ -11,9 +11,13 @@ import MapKit
 import Parse
 
 
-class GameDetailsViewController: UIViewController, MKMapViewDelegate {
+class GameDetailsViewController: UIViewController, MKMapViewDelegate, UITableViewDataSource, UITableViewDelegate {
     
     //MARK: - Properties
+    
+    @IBOutlet var playersTableView: UITableView!
+    var playersArray  = [Player]()
+    
     @IBOutlet var SingleGameMap: MKMapView!
     @IBOutlet var GameDescription: UITextView!
     //@IBOutlet var mapController: UISegmentedControl!
@@ -30,9 +34,33 @@ class GameDetailsViewController: UIViewController, MKMapViewDelegate {
     let currentUser = PFUser.currentUser()
     let currentlyViewedGame = PFObject(className: "Games")
     
+    //MARK: - TableViewMethods
+    
+    func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+        if playersArray.count != 0 {
+            let cell = tableView.dequeueReusableCellWithIdentifier("cell")! as UITableViewCell
+            cell.textLabel?.text = playersArray[indexPath.row].playerName
+            cell.imageView?.image = playersArray[indexPath.row].playerImage
+            playersTableView.hidden = false
+            print("Displaying Players")
+            return cell
+        } else {
+            let cell = tableView.dequeueReusableCellWithIdentifier("cell")! as UITableViewCell
+            playersTableView.hidden = true
+            print("No Players to Display")
+            return cell
+        }
+        
+    }
+    
+    func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        print("TableView Row Count: \(playersArray.count)")
+        return playersArray.count
+    }
+    
     //MARK: - Map Functions
     
-    func openMap(){
+    func openAppleMaps(){
         
         let regionDistance:CLLocationDistance = 10000
         let coordinates = CLLocationCoordinate2DMake(selectedGame.GameLat, selectedGame.GameLong)
@@ -94,7 +122,7 @@ class GameDetailsViewController: UIViewController, MKMapViewDelegate {
     
     func mapView(mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
         //route()
-        openMap()
+        openAppleMaps()
         //bottomConstraint.constant = 0
     }
     //MARK: - Rounting Methods
@@ -128,9 +156,11 @@ class GameDetailsViewController: UIViewController, MKMapViewDelegate {
     }
     
     //MARK: - Switch Functions
-    func switchPressed() {
+    @IBAction func switchPressed() {
+        let currentUser = PFUser.currentUser()
         let relation = currentlyViewedGame.relationForKey("User")
-        print(relation.description)
+        relation.addObject(currentUser!)
+        print("added \(currentUser!["Name"] as! String)")
     }
     
     //MARK: - Parse Query
@@ -169,6 +199,7 @@ class GameDetailsViewController: UIViewController, MKMapViewDelegate {
         GameDescription.text = selectedGame.GameDescription
         GameDescription.contentOffset = CGPoint.zero
         QueryParseForCurrentGame()
+        print("Players Array Count: \(playersArray.count)")
         
         
         
