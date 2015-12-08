@@ -19,12 +19,10 @@ class GameDetailsViewController: UIViewController, MKMapViewDelegate, UITableVie
     @IBOutlet var playersTableView: UITableView!
     var playersArray  = [Player]()
     var playerObject = Player()
-    var playerNameArray  = [String]()
+    var playerUsernameArray  = [String]()
     
     @IBOutlet var SingleGameMap: MKMapView!
     @IBOutlet var GameDescription: UITextView!
-    //@IBOutlet var mapController: UISegmentedControl!
-    //@IBOutlet var bottomConstraint: NSLayoutConstraint!
     @IBOutlet var NavBarTitle: UINavigationItem!
     @IBOutlet var attendanceSwitch: UISwitch!
     
@@ -40,30 +38,48 @@ class GameDetailsViewController: UIViewController, MKMapViewDelegate, UITableVie
     //MARK: - Switch Functions
     
     @IBAction func switchPressed(sender:UISwitch) {
-       let relation = parseGame.relationForKey("User")
-        if attendanceSwitch.on {
-            relation.addObject(currentUser!)
-            print("added: \(currentUser!["Name"] as! String) to Game List")
+        let relation = parseGame.relationForKey("User")
+        if currentUser == nil {
+            alertView("Please Login", message: "Please login on the homescreen before marking your attendance")
         } else {
-            relation.removeObject(currentUser!)
-            playerNameArray.removeLast() // FIGURE OUT A BETTER WAY
-            print("Removed: \(currentUser!["Name"] as! String) From Game List")
-        
+            if attendanceSwitch.on {
+                relation.addObject(currentUser!)
+                print("added: \(currentUser!["username"] as! String) to Game List")
+                do {
+                  try parseGame.save()
+                    QueryGamesForPlayers()
+                } catch {
+                    print("Error")
+                }
+            } else {
+                relation.removeObject(currentUser!)
+                playerUsernameArray.removeLast() // FIGURE OUT A BETTER WAY
+                print("Removed: \(currentUser!["username"] as! String) From Game List")
+                
+                let nameToRemove = currentUser!["username"] as! String
+                let playerToRemove = playersArray.filter({$0.userName == nameToRemove}).first!
+                Player().userName = nameToRemove
+                let playerToRemoveIndex = playersArray.indexOf(playerToRemove)
+                playersArray.removeAtIndex(playerToRemoveIndex!)
+                playersTableView.reloadData()
+                parseGame.saveInBackground()
+                
+                
+            }
+            
+            
+           
         }
-        
-        parseGame.saveInBackgroundWithBlock { (Bool, error) -> Void in
-             self.QueryGamesForPlayers()
-            self.playersTableView.reloadData()
-        }
-        //viewDidLoad()
     }
-    
     func setSwitchState() {
-        let currentUserName = currentUser!["Name"] as! String
-        if playerNameArray.contains(currentUserName) {
+        if currentUser != nil {
+        let currentUserName = currentUser!["username"] as! String
+        if playerUsernameArray.contains(currentUserName) {
             attendanceSwitch.on = true
+            print("\(playerUsernameArray) contains \(currentUserName): Switch On")
         } else {
             attendanceSwitch.on = false
+        }
         }
     }
     
@@ -78,12 +94,12 @@ class GameDetailsViewController: UIViewController, MKMapViewDelegate, UITableVie
         let cell = tableView.dequeueReusableCellWithIdentifier("cell")! as UITableViewCell
         
         //if playersArray.count != 0 {
-            cell.textLabel?.text = playersArray[indexPath.row].playerName
-            cell.imageView?.image = playersArray[indexPath.row].playerImage
-            playersTableView.hidden = false
-            print("Displaying Players")
-            //print("\(player)")
-            return cell
+        cell.textLabel?.text = playersArray[indexPath.row].playerName
+        cell.imageView?.image = playersArray[indexPath.row].playerImage
+        playersTableView.hidden = false
+        print("Displaying Players")
+        //print("\(player)")
+        return cell
         
     }
     
@@ -140,40 +156,8 @@ class GameDetailsViewController: UIViewController, MKMapViewDelegate, UITableVie
     
     
     func mapView(mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
-        //route()
         openAppleMaps()
-        //bottomConstraint.constant = 0
     }
-    //MARK: - Rounting Methods
-    
-    func route() {
-        let request = MKDirectionsRequest()
-        request.source = MKMapItem(placemark: MKPlacemark(coordinate: CLLocationCoordinate2D(latitude: locManager.userLocationCoordinates.latitude, longitude: locManager.userLocationCoordinates.longitude), addressDictionary: nil))
-        request.destination = MKMapItem(placemark: MKPlacemark(coordinate: CLLocationCoordinate2D(latitude: selectedGame.GameLat, longitude: selectedGame.GameLong), addressDictionary: nil))
-        request.requestsAlternateRoutes = true
-        request.transportType = .Automobile
-        
-        let directions = MKDirections(request: request)
-        
-        directions.calculateDirectionsWithCompletionHandler { [unowned self] response, error in
-            guard let unwrappedResponse = response else { return }
-            for route in unwrappedResponse.routes {
-                self.SingleGameMap.addOverlay(route.polyline)
-                self.SingleGameMap.setVisibleMapRect(route.polyline.boundingMapRect, animated: true)
-                for step in route.steps {
-                    print(step.instructions)
-                }
-            }
-        }
-    }
-    
-    func mapView(mapView: MKMapView, rendererForOverlay overlay: MKOverlay) -> MKOverlayRenderer {
-        let renderer = MKPolylineRenderer(polyline: overlay as! MKPolyline)
-        renderer.strokeColor = UIColor.blueColor()
-        renderer.lineWidth = 5
-        return renderer
-    }
-    
     
     
     //MARK: - Parse Query Methods
@@ -193,7 +177,7 @@ class GameDetailsViewController: UIViewController, MKMapViewDelegate, UITableVie
                     print("Current ParseGame: \(self.parseGame["Title"])")
                 }
             } else {
-                // Log details of the failure
+                self.alertView("Error", message: "Could not reach server")// Log details of the failure
                 print("Error: \(error!) \(error!.userInfo)")
             }
         }
@@ -206,7 +190,8 @@ class GameDetailsViewController: UIViewController, MKMapViewDelegate, UITableVie
             if error == nil {
                 for player in players! {
                     self.playerObject.playerName = player["Name"] as! String
-                    self.playerNameArray.append(player["Name"] as! String)
+                    self.playerObject.userName = player["username"] as! String
+                    self.playerUsernameArray.append(player["username"] as! String)
                     //print("PlayerNamesArray: \(self.playerNameArray)")
                     
                     let imageFile = (player["imageFile"] as! PFFile)
@@ -218,6 +203,7 @@ class GameDetailsViewController: UIViewController, MKMapViewDelegate, UITableVie
                                 self.playersTableView.reloadData()
                             }
                         } else {
+                            self.alertView("Error", message: "Could not reach serevr")
                             print("No Image Found")
                         }
                     }
@@ -236,15 +222,20 @@ class GameDetailsViewController: UIViewController, MKMapViewDelegate, UITableVie
                 self.setSwitchState()
                 
             } else {
+                self.alertView("Error", message: "Could not reach server")
                 print("Error: \(error!) \(error!.userInfo)")
             }
             
         }
     }
+    //MARK: - Alert View
     
-    
-    
-    
+    func alertView(title:String, message:String) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
+        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil))
+        self.presentViewController(alert, animated: true, completion: nil)
+    }
+
     
     //MARK: - Lifecycle Methods
     
@@ -258,7 +249,9 @@ class GameDetailsViewController: UIViewController, MKMapViewDelegate, UITableVie
         GameDescription.font = UIFont(name: "Damascus", size: 20.0)
         GameDescription.text = selectedGame.GameDescription
         GameDescription.contentOffset = CGPoint.zero
+        
         QueryParseForCurrentGame()
+        print(playersArray)
         //print("Players Array Count: \(playersArray.count)")
         
         

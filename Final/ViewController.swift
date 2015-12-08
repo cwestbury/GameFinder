@@ -20,8 +20,11 @@ class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpV
     @IBOutlet var loginButton : UIBarButtonItem!
     @IBOutlet var LocationSearchBar: UISearchBar!
     var selectedGame :Games!
+    let currentUser = PFUser.currentUser()
     
     var loggedIN = false
+    let loginVC = PFLogInViewController()
+    let signUpVC = PFSignUpViewController()
     
     var locManger = LocationManager.sharedInstance
     var servManger = serverManager.sharedInstance
@@ -30,6 +33,7 @@ class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpV
     var searchBarCity : String!
     
     //MARK: - Interacvity
+
     @IBAction func addGamePressed() {
         
         if let url = NSURL(string: "http://pickupultimate.com/game/add") {
@@ -40,23 +44,33 @@ class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpV
     
     
     //MARK: - Parse Login Methods
-    func checkForLogin(){
-        if PFUser.currentUser() == nil {
-            loginButton.title = "Login"
-                        
-        } else {
-            loginButton.title = "Logout"
-        }
-    }
+    
+//    
+//    func checkForLogin(){
+//        print("\(currentUser!["Name"] as! String)")
+//        if currentUser![] == nil {
+//            loginButton.title = "Login"
+//            loggedIN = false
+//            loginVC.delegate = self
+//            signUpVC.delegate = self
+//            loginVC.signUpController = signUpVC
+//            presentViewController(loginVC, animated: true, completion: nil)
+//            
+//            
+//        } else {
+//            loginButton.title = "Logout"
+//            loggedIN = true
+//            print("\(currentUser!["Name"] as! String)Logged In")
+//        }
+//    }
     
     @IBAction func loginButtonPresesd(sender:UIBarButtonItem) {
         if let _ = PFUser.currentUser() {
             PFUser.logOut()
             loginButton.title = "Login"
         } else {
-            let loginVC = PFLogInViewController()
+            
             loginVC.delegate = self
-            let signUpVC = PFSignUpViewController()
             signUpVC.delegate = self
             loginVC.signUpController = signUpVC
             presentViewController(loginVC, animated: true, completion: nil)
@@ -213,6 +227,7 @@ class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpV
         locManger.setUpLocationMonitoring()
         gameMap.showsUserLocation = true
         centerMapView()
+        //checkForLogin()
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "currentLocationRecieved", name: "recievedLocationFromUser", object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "addGamesToMap", name: "parsedGameData", object: nil)
