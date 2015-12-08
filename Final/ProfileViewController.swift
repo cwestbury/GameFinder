@@ -47,7 +47,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
             uCurrentUser["imageFile"] = imageFile
             uCurrentUser.saveInBackground()
             print("saved to parse")
-            //self.navigationController!.popToRootViewControllerAnimated(true)
+            self.navigationController!.popToRootViewControllerAnimated(true)
         }
         else {
             print("No Current User")
@@ -58,11 +58,12 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         if let uCurrentUser = currentUser {
             currentUser = uCurrentUser
             
-            nameLabel.text! = (uCurrentUser["Name"] as! String)
+            nameLabel.text! = (uCurrentUser["username"] as! String)
+            print("current user name: \(uCurrentUser["username"]as! String)")
             
             
-            let userImageFile = uCurrentUser["imageFile"] as! PFFile
-            userImageFile.getDataInBackgroundWithBlock {
+            let userImageFile = uCurrentUser["imageFile"] as? PFFile
+            userImageFile?.getDataInBackgroundWithBlock {
                 (imageData: NSData?, error: NSError?) -> Void in
                 if error == nil {
                     if let imageData = imageData {
@@ -73,6 +74,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
                 
             }
         } else {
+            alertView("Error", message: "Could not contact server")
             print("No Current User")
 
         }
@@ -97,8 +99,14 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         self.dismissViewControllerAnimated(true, completion: nil);
     }
     
+    //MARK: - Alert View
     
-    
+    func alertView(title:String, message:String) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
+        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil))
+        self.presentViewController(alert, animated: true, completion: nil)
+    }
+
     //MARK: - Lifecycle Methods
     
     override func viewDidLoad() {

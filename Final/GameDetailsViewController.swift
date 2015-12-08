@@ -18,7 +18,7 @@ class GameDetailsViewController: UIViewController, MKMapViewDelegate, UITableVie
     
     @IBOutlet var playersTableView: UITableView!
     var playersArray  = [Player]()
-    var playerObject = Player()
+ 
     var playerUsernameArray  = [String]()
     
     @IBOutlet var SingleGameMap: MKMapView!
@@ -43,6 +43,7 @@ class GameDetailsViewController: UIViewController, MKMapViewDelegate, UITableVie
             alertView("Please Login", message: "Please login on the homescreen before marking your attendance")
         } else {
             if attendanceSwitch.on {
+                attendanceSwitch.enabled = false
                 relation.addObject(currentUser!)
                 print("added: \(currentUser!["username"] as! String) to Game List")
                 do {
@@ -51,7 +52,9 @@ class GameDetailsViewController: UIViewController, MKMapViewDelegate, UITableVie
                 } catch {
                     print("Error")
                 }
+                attendanceSwitch.enabled = true
             } else {
+                attendanceSwitch.enabled = false
                 relation.removeObject(currentUser!)
                 playerUsernameArray.removeLast() // FIGURE OUT A BETTER WAY
                 print("Removed: \(currentUser!["username"] as! String) From Game List")
@@ -62,9 +65,15 @@ class GameDetailsViewController: UIViewController, MKMapViewDelegate, UITableVie
                 let playerToRemoveIndex = playersArray.indexOf(playerToRemove)
                 playersArray.removeAtIndex(playerToRemoveIndex!)
                 playersTableView.reloadData()
-                parseGame.saveInBackground()
+                do{
+                    try parseGame.save()
+                    attendanceSwitch.enabled = true
+                } catch {
+                    print("Error saving relationship")
+                }
                 
                 
+
             }
             
             
@@ -83,7 +92,7 @@ class GameDetailsViewController: UIViewController, MKMapViewDelegate, UITableVie
         }
     }
     
-    
+
     
     //MARK: - TableView Methods
     func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
@@ -91,20 +100,26 @@ class GameDetailsViewController: UIViewController, MKMapViewDelegate, UITableVie
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
+//        let MapCell : customMapCell = tableView.dequeueReusableCellWithIdentifier("MapCell") as! customMapCell
+//        MapCell.SingleGameMapView = SingleGameMap
+//        
+//        let DescCell : CustomDescriptionCell = tableView.dequeueReusableCellWithIdentifier("DescCell") as! CustomDescriptionCell
+//        DescCell.GameDescriptionTextView.text! = selectedGame.GameDescription
+//        
         let cell = tableView.dequeueReusableCellWithIdentifier("cell")! as UITableViewCell
         
         //if playersArray.count != 0 {
         cell.textLabel?.text = playersArray[indexPath.row].playerName
         cell.imageView?.image = playersArray[indexPath.row].playerImage
         playersTableView.hidden = false
-        print("Displaying Players")
+       // print("Displaying Players")
         //print("\(player)")
         return cell
         
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        print("TableView Row Count: \(playersArray.count)")
+       // print("TableView Rows Count: \(playersArray.count)")
         return playersArray.count
     }
     
@@ -182,24 +197,27 @@ class GameDetailsViewController: UIViewController, MKMapViewDelegate, UITableVie
             }
         }
     }
+
     
     func QueryGamesForPlayers() {
+        playersArray.removeAll()
+        playerUsernameArray.removeAll()
         let relation = parseGame.relationForKey("User")
         let query = relation.query()
         query.findObjectsInBackgroundWithBlock { (players, error) -> Void in
             if error == nil {
                 for player in players! {
-                    self.playerObject.playerName = player["Name"] as! String
-                    self.playerObject.userName = player["username"] as! String
+                        let playerObject = Player()
+                    playerObject.playerName = player["Name"] as! String
+                    playerObject.userName = player["username"] as! String
                     self.playerUsernameArray.append(player["username"] as! String)
-                    //print("PlayerNamesArray: \(self.playerNameArray)")
-                    
                     let imageFile = (player["imageFile"] as! PFFile)
                     imageFile.getDataInBackgroundWithBlock {
                         (imageData: NSData?, error: NSError?) -> Void in
                         if error == nil {
                             if let imageData = imageData {
-                                self.playerObject.playerImage = UIImage(data:imageData)
+                                playerObject.playerImage = UIImage(data:imageData)
+                            
                                 self.playersTableView.reloadData()
                             }
                         } else {
@@ -208,10 +226,10 @@ class GameDetailsViewController: UIViewController, MKMapViewDelegate, UITableVie
                         }
                     }
                     
-                    if self.playersArray.contains(self.playerObject) {
+                    if self.playersArray.contains(playerObject) {
                         print("Already contains: \(player["Name"])")
                     } else {
-                        self.playersArray.append(self.playerObject)
+                        self.playersArray.append(playerObject)
                         print("Added: \(player["Name"])")
                     }
                     

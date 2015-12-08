@@ -19,6 +19,7 @@ class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpV
     @IBOutlet var gameMap: MKMapView!
     @IBOutlet var loginButton : UIBarButtonItem!
     @IBOutlet var LocationSearchBar: UISearchBar!
+    @IBOutlet var settingsButton: UIBarButtonItem!
     var selectedGame :Games!
     let currentUser = PFUser.currentUser()
     
@@ -45,29 +46,38 @@ class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpV
     
     //MARK: - Parse Login Methods
     
-//    
-//    func checkForLogin(){
-//        print("\(currentUser!["Name"] as! String)")
-//        if currentUser![] == nil {
-//            loginButton.title = "Login"
-//            loggedIN = false
-//            loginVC.delegate = self
-//            signUpVC.delegate = self
-//            loginVC.signUpController = signUpVC
-//            presentViewController(loginVC, animated: true, completion: nil)
-//            
-//            
-//        } else {
-//            loginButton.title = "Logout"
-//            loggedIN = true
-//            print("\(currentUser!["Name"] as! String)Logged In")
-//        }
-//    }
+    
+    func checkForLogin(){
+        if let userName = currentUser?["Name"] as? String {
+        print("currentUsername: \(userName)")
+        if  userName == "" {
+            loginButton.title = "Logout"
+            settingsButton.enabled = true
+            settingsButton.title = "⚙"
+            loggedIN = true
+        } else {
+           
+            
+            //print("\(currentUser!["Name"] as! String)Logged In")
+        }
+    }
+        loginButton.title = "Login"
+        loggedIN = false
+        settingsButton.enabled = false
+        settingsButton.title = ""
+        loginVC.delegate = self
+        signUpVC.delegate = self
+        loginVC.signUpController = signUpVC
+        presentViewController(loginVC, animated: true, completion: nil)
+    }
     
     @IBAction func loginButtonPresesd(sender:UIBarButtonItem) {
         if let _ = PFUser.currentUser() {
             PFUser.logOut()
             loginButton.title = "Login"
+            settingsButton.enabled = false
+            settingsButton.title = ""
+            
         } else {
             
             loginVC.delegate = self
@@ -79,9 +89,13 @@ class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpV
     
     func logInViewController(logInController: PFLogInViewController, didLogInUser user: PFUser) {
         dismissViewControllerAnimated(true, completion: nil)
+        settingsButton.enabled = true
+        settingsButton.title = "⚙"
         loginButton.title = "Log Out"
+        loggedIN = true
         
     }
+    
     
     func logInViewControllerDidCancelLogIn(logInController: PFLogInViewController) {
         dismissViewControllerAnimated(true, completion: nil)
@@ -92,6 +106,7 @@ class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpV
     }
     func signUpViewControllerDidCancelSignUp(signUpController: PFSignUpViewController) {
         dismissViewControllerAnimated(true, completion: nil)
+        checkForLogin()
     }
     
     //MARK: - Search Bar Methods
@@ -104,7 +119,7 @@ class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpV
             if textToSearch == "dc" {
                 textToSearch = "washingtonDC"
             }
-            print("input text: \(textToSearch)")
+            //print("input text: \(textToSearch)")
             locManger.getSearchedLocation(textToSearch)
             // searchedCity = locManger.searchedCity
             //print(searchedCity)
@@ -120,15 +135,13 @@ class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpV
     
     func searchCity() {
         searchBarCity = locManger.searchedCity
-        print("searchBar City: \(searchBarCity)")
+        //print("searchBar City: \(searchBarCity)")
         RSSParser.searchedNSURLString(searchBarCity)
         RSSParser.getGameInfo()
         locManger.centerMapOnSearch(gameMap)
     }
     
-    
-    
-    
+
     //MARK: - Map Methods
     
     @IBAction func centerMapView() {
@@ -156,9 +169,13 @@ class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpV
     }
     func mapView(mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
         //servManager.saveGeoPoint(newGameLat, long: newGameLong)
+        if loggedIN == true {
         let annotation = view.annotation as! GamePointAnnotation
         selectedGame = annotation.pinGame
         performSegueWithIdentifier("gameDetailSegue", sender: self)
+        } else {
+            genericAlertView("Please Login", message: "You must login before viewing games!")
+        }
     }
 
     func removePins() {
@@ -166,9 +183,7 @@ class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpV
         gameMap.removeAnnotations(pins)
         pins.removeAll()
     }
-    
-    
-    
+
     func currentLocationRecieved() {
         RSSParser.currentLocationNSURLString()
         RSSParser.getGameInfo()
@@ -183,18 +198,13 @@ class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpV
             locManger.addMapPins(gameMap, lat: GamesToParse.GameLat, long: GamesToParse.GameLong, Title: GamesToParse.Title, game: GamesToParse)
         }
         if RSSParser.gameArray.count == 0 {
-            alertView()
+             genericAlertView("😭😭😭", message: "No games found in \(searchBarCity)")
+            
         }
     }
-    func alertView() {
-        let alert = UIAlertController(title: "😭😭😭", message: "No games found in \(searchBarCity)", preferredStyle: UIAlertControllerStyle.Alert)
-        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil))
-        self.presentViewController(alert, animated: true, completion: nil)
-    }
+ 
 
     //MARK: - Segue Methods
-    
-    
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
         if (segue.identifier == "gameDetailSegue"){
@@ -219,6 +229,14 @@ class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpV
     //        }
     //    }
     
+    //MARK: - Alert View
+    
+    func genericAlertView(title:String, message:String) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.Alert)
+        alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil))
+        self.presentViewController(alert, animated: true, completion: nil)
+    }
+    
     //MARK: - LifeCycle Methods
     
     override func viewDidLoad() {
@@ -227,7 +245,7 @@ class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpV
         locManger.setUpLocationMonitoring()
         gameMap.showsUserLocation = true
         centerMapView()
-        //checkForLogin()
+        checkForLogin()
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "currentLocationRecieved", name: "recievedLocationFromUser", object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "addGamesToMap", name: "parsedGameData", object: nil)

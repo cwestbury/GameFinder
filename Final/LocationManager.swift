@@ -32,7 +32,7 @@ class LocationManager: NSObject, CLLocationManagerDelegate, MKMapViewDelegate {
         if (userLocationCoordinates.latitude == 0 && userLocationCoordinates.longitude == 0) {
             let locValue:CLLocationCoordinate2D = manager.location!.coordinate
             userLocationCoordinates = CLLocationCoordinate2D(latitude: locations.last!.coordinate.latitude, longitude:locations.last!.coordinate.longitude)
-            print("Location Manager: User location = Lat: \(locValue.latitude) Long: \(locValue.longitude)")
+            //print("Location Manager: User location = Lat: \(locValue.latitude) Long: \(locValue.longitude)")
             let location = CLLocation(latitude: locValue.latitude, longitude: locValue.longitude)
             CLGeocoder().reverseGeocodeLocation(location, completionHandler: {(placemarks, error) -> Void in
                 if error != nil {
@@ -42,7 +42,7 @@ class LocationManager: NSObject, CLLocationManagerDelegate, MKMapViewDelegate {
                 if placemarks!.count > 0 {
                     let pm = placemarks![0]
                     self.userCity = pm.locality!
-                    print(pm.locality!)
+                    //print(pm.locality!)
                     
                     dispatch_async(dispatch_get_main_queue()){
                         NSNotificationCenter.defaultCenter().postNotification(NSNotification(name: "recievedLocationFromUser", object: nil))
@@ -79,7 +79,7 @@ class LocationManager: NSObject, CLLocationManagerDelegate, MKMapViewDelegate {
     }
     
     func locationManager(manager: CLLocationManager, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
-        print("Got new auth status \(status.rawValue)")
+        //print("Got new auth status \(status.rawValue)")
         //        setUpLocationMonitoring()
     }
     
@@ -94,7 +94,7 @@ class LocationManager: NSObject, CLLocationManagerDelegate, MKMapViewDelegate {
         if CLLocationManager.locationServicesEnabled() {
             switch CLLocationManager.authorizationStatus() {
             case .AuthorizedAlways, .AuthorizedWhenInUse:
-                print("have access to location \(userLocationCoordinates) l:\(userLocationCoordinates.latitude)")
+                //print("have access to location \(userLocationCoordinates) l:\(userLocationCoordinates.latitude)")
                 locationManager.requestLocation()
             case .Denied, .Restricted:
                 print("Location services disabled/restricted")
@@ -113,9 +113,9 @@ class LocationManager: NSObject, CLLocationManagerDelegate, MKMapViewDelegate {
     //MARK: - Map Methods
     
     func centerMapView(map:MKMapView) {
-        print("AddGame: Center Map View Running")
+        //print("AddGame: Center Map View Running")
         let currentLocaiton = locationManager.location!.coordinate
-        print(currentLocaiton)
+        //print(currentLocaiton)
         let center = CLLocationCoordinate2DMake(currentLocaiton.latitude, currentLocaiton.longitude)
         let region = MKCoordinateRegion(center: center, span: MKCoordinateSpan(latitudeDelta: 0.0675, longitudeDelta: 0.0675))
         map.setRegion(region, animated: true)

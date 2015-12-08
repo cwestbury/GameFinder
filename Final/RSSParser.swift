@@ -116,14 +116,14 @@ class rssParser: NSObject, NSXMLParserDelegate {
     }
     
     func getGameInfo() {
-        print("Search String: \(searchedUrlString.relativeString)")
+        //print("Search String: \(searchedUrlString.relativeString)")
         if searchedUrlString.relativeString == nil {
             rssUrlRequest = NSURLRequest(URL: currentLocationUrlString)
-            print("Current Location String: \(currentLocationUrlString)")
+            //print("Current Location String: \(currentLocationUrlString)")
             
         } else {
             rssUrlRequest = NSURLRequest(URL: searchedUrlString)
-            print("Searched String: \(searchedUrlString)")
+           // print("Searched String: \(searchedUrlString)")
         }
         let urlSession = NSURLSession.sharedSession()
         let task = urlSession.dataTaskWithRequest(rssUrlRequest) { (data, response, error) -> Void in
@@ -211,21 +211,21 @@ class rssParser: NSObject, NSXMLParserDelegate {
             
             //searchedGameSavedToParse = newGame.Title
             
-            print("seached Game: \(searchedGameSavedToParse)")
+            //print("seached Game: \(searchedGameSavedToParse)")
             
-            print("Search Array  count Before Current Loc Search: \(searchedGameArray.count)")
+            //print("Search Array  count Before Current Loc Search: \(searchedGameArray.count)")
             if searchedGameArray.contains(newGame.Title) {
-                print("Game already on parse")
+               // print("Game already on parse")
             }else {
                 searchedGameArray.append(newGame.Title)
                 servManager.saveGameFromWebsite(newGame.Title, gameDescription: cleanString, gameLat: newGame.GameLat, gameLong: newGame.GameLong)
-                print("addGame to parse")
+               // print("addGame to parse")
             }
             
             
             //checkForGames(searchedGameSavedToParse, SearchedGameArray: searchedGameArray)
             
-            print("Search Array count After Current Loc Search: \(searchedGameArray.count)")
+            //print("Search Array count After Current Loc Search: \(searchedGameArray.count)")
             
             
             
@@ -236,24 +236,6 @@ class rssParser: NSObject, NSXMLParserDelegate {
         }
     }
     
-    func checkForGames(gameTitle: String, var SearchedGameArray: [String]){
-        if  SearchedGameArray.contains(gameTitle){
-            print("game Name: \(gameTitle) already stored")
-            //print("game already stored")
-            // new game
-        } else {
-            let gameToStore = gameTitle
-            print("game Name: \(gameToStore)")
-            SearchedGameArray.append(gameToStore)
-            print("Array: \(searchedGameArray)")
-            servManager.saveGameFromWebsite(newGame.Title, gameDescription: cleanString, gameLat: newGame.GameLat, gameLong: newGame.GameLong)
-            print("game stored")
-            
-        }
-        
-        //already found game
-        
-    }
     
     func queryParseForGames() {
         let query = PFQuery(className:"Games")

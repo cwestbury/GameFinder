@@ -19,33 +19,29 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kZV-Mj-qEi">
-                                <rect key="frame" x="20" y="114" width="244" height="244"/>
-                                <animations/>
-                            </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Name Label:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8VK-nR-hxA">
-                                <rect key="frame" x="20" y="371" width="96" height="21"/>
+                                <rect key="frame" x="81" y="394" width="96" height="21"/>
                                 <animations/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Gender Label:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="egA-j0-ePy">
-                                <rect key="frame" x="20" y="400" width="108" height="21"/>
+                                <rect key="frame" x="81" y="423" width="108" height="21"/>
                                 <animations/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Experience:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aCs-cu-LP3">
-                                <rect key="frame" x="20" y="429" width="90" height="21"/>
+                                <rect key="frame" x="81" y="452" width="90" height="21"/>
                                 <animations/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Age Label: " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="K10-rx-aiz">
-                                <rect key="frame" x="20" y="458" width="85" height="21"/>
+                                <rect key="frame" x="81" y="481" width="85" height="21"/>
                                 <animations/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -54,31 +50,31 @@
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0iE-Mc-geD">
                                 <rect key="frame" x="72" y="72" width="126" height="30"/>
                                 <animations/>
-                                <state key="normal" title="get a profile pic"/>
+                                <state key="normal" title="Choose a Picture"/>
                                 <connections>
                                     <action selector="openPhotoLibraryButton:" destination="Kzx-Se-N0b" eventType="touchUpInside" id="k4b-4S-5LS"/>
                                 </connections>
                             </button>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Z4o-TX-zFY">
-                                <rect key="frame" x="153" y="362" width="97" height="30"/>
+                                <rect key="frame" x="214" y="385" width="97" height="30"/>
                                 <animations/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="z09-VR-Gbc">
-                                <rect key="frame" x="153" y="396" width="97" height="30"/>
+                                <rect key="frame" x="214" y="419" width="97" height="30"/>
                                 <animations/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="7q0-21-NxT">
-                                <rect key="frame" x="153" y="429" width="97" height="30"/>
+                                <rect key="frame" x="214" y="452" width="97" height="30"/>
                                 <animations/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="f60-k5-esg">
-                                <rect key="frame" x="153" y="467" width="97" height="30"/>
+                                <rect key="frame" x="214" y="490" width="97" height="30"/>
                                 <animations/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
@@ -91,6 +87,10 @@
                                     <action selector="submitValuesToParse:" destination="Kzx-Se-N0b" eventType="touchUpInside" id="7em-ar-CH1"/>
                                 </connections>
                             </button>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="kZV-Mj-qEi">
+                                <rect key="frame" x="94" y="110" width="244" height="244"/>
+                                <animations/>
+                            </imageView>
                         </subviews>
                         <animations/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -340,9 +340,10 @@
                     </view>
                     <navigationItem key="navigationItem" id="g9S-wM-Tn1">
                         <leftBarButtonItems>
-                            <barButtonItem title="Profile" id="B12-FY-3hw">
+                            <barButtonItem title="⚙" style="plain" id="B12-FY-3hw">
+                                <color key="tintColor" red="0.092598296701908112" green="0.8786885142326355" blue="0.95157617330551147" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <connections>
-                                    <segue destination="Kzx-Se-N0b" kind="show" id="8RS-x6-kZv"/>
+                                    <segue destination="Kzx-Se-N0b" kind="show" identifier="profileSegue" id="8RS-x6-kZv"/>
                                 </connections>
                             </barButtonItem>
                             <barButtonItem title="Login" id="viZ-wB-6hg">
@@ -361,6 +362,7 @@
                         <outlet property="LocationSearchBar" destination="6uq-Yq-sRg" id="Sg0-IS-4CA"/>
                         <outlet property="gameMap" destination="EhV-dc-1ot" id="rB3-Fw-sBC"/>
                         <outlet property="loginButton" destination="viZ-wB-6hg" id="34N-bL-JZS"/>
+                        <outlet property="settingsButton" destination="B12-FY-3hw" id="H0N-ga-hbj"/>
                         <segue destination="NEi-T6-JKQ" kind="show" identifier="gameDetailSegue" id="Pg6-jX-kci"/>
                     </connections>
                 </viewController>
@@ -409,8 +411,36 @@
                                 <animations/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="CustomCell" rowHeight="130" id="uS4-xT-k9v" customClass="CustomPlayerUITableView" customModule="Final" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="28" width="206" height="130"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="uS4-xT-k9v" id="2lZ-mH-C6D">
+                                            <rect key="frame" x="0.0" y="0.0" width="206" height="129.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="iFo-Cf-ct2">
+                                                    <rect key="frame" x="0.0" y="-5" width="211" height="48.5"/>
+                                                    <animations/>
+                                                </mapView>
+                                                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" editable="NO" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="Lux-bg-d6y">
+                                                    <rect key="frame" x="0.0" y="45" width="206" height="125"/>
+                                                    <animations/>
+                                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                                    <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                                    <dataDetectorType key="dataDetectorTypes" phoneNumber="YES" link="YES" address="YES"/>
+                                                </textView>
+                                            </subviews>
+                                            <animations/>
+                                        </tableViewCellContentView>
+                                        <animations/>
+                                        <connections>
+                                            <outlet property="SingleGameMapView" destination="iFo-Cf-ct2" id="Z1Y-h3-quQ"/>
+                                        </connections>
+                                    </tableViewCell>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cell" textLabel="E4i-wv-jJE" style="IBUITableViewCellStyleDefault" id="iCD-Wl-Zdr">
-                                        <rect key="frame" x="0.0" y="28" width="206" height="44"/>
+                                        <rect key="frame" x="0.0" y="158" width="206" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="iCD-Wl-Zdr" id="gEW-zA-kVR">
                                             <rect key="frame" x="0.0" y="0.0" width="206" height="43.5"/>
