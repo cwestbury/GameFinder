@@ -20,6 +20,7 @@ class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpV
     @IBOutlet var loginButton : UIBarButtonItem!
     @IBOutlet var LocationSearchBar: UISearchBar!
     @IBOutlet var settingsButton: UIBarButtonItem!
+    @IBOutlet var centerMapButton: UIButton!
     var selectedGame :Games!
     let currentUser = PFUser.currentUser()
     
@@ -59,8 +60,8 @@ class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpV
 
             
         } else {
-            print("currentUsername: \(currentUser)")
-            loginButton.title = "Logout"
+            //print("currentUsername: \(currentUser)")
+            loginButton.title = ""
             settingsButton.enabled = true
             settingsButton.title = "⚙"
             loggedIN = true
@@ -115,7 +116,7 @@ class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpV
             if textToSearch == "dc" {
                 textToSearch = "washingtonDC"
             }
-            //print("input text: \(textToSearch)")
+            print("input text: \(textToSearch)")
             locManger.getSearchedLocation(textToSearch)
             // searchedCity = locManger.searchedCity
             //print(searchedCity)
@@ -140,10 +141,7 @@ class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpV
 
     //MARK: - Map Methods
     
-    @IBAction func centerMapView() {
-        locManger.centerMapView(gameMap)
-    }
-    
+   
     
     func mapView(mapView: MKMapView, viewForAnnotation annotation: MKAnnotation) -> MKAnnotationView? {
         if annotation.isMemberOfClass(MKUserLocation.self) {
@@ -181,22 +179,52 @@ class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpV
     }
 
     func currentLocationRecieved() {
+        print("CurrentLocation Recived")
         RSSParser.currentLocationNSURLString()
         RSSParser.getGameInfo()
     }
     
+    @IBAction func SearchCurrentLocation() {
+        LocationSearchBar.text = ""
+        searchBarCity = locManger.userCity
+        
+        var city = locManger.userCity
+        if city == "Washington" {
+            city = "WashingtonDC"
+        }
+        
+//        var NSUrl = NSURL()
+//        URLRequest = NSURLRequst(
+        let url = NSURL(string: "http://pickupultimate.com/rss/city/\(city)")!
+        let URLRequest = NSURLRequest(URL: url)
+        //let URLRequest = (NSURL: "http://pickupultimate.com/rss/city/\(city)")
+        RSSParser.SearchCurrentLocation(URLRequest)
+        
+        
+        //currentLocationRecieved()
+        //        RSSParser.currentLocationNSURLString()
+        //        RSSParser.getGameInfo()
+        locManger.centerMapView(gameMap)
+        
+    }
+    
+    
     func addGamesToMap() {
-        print("adding XML parsed Games")
-        //let GamesToParse = Games()
+        centerMapButton.enabled = true
         removePins()
+        print("adding XML parsed Games")
+        print("Game count: \(RSSParser.gameArray.count)")
+        if RSSParser.gameArray.count == 0 && searchBarCity == nil {
+            genericAlertView("😭😭😭", message: "No games found near you")
+        } else if RSSParser.gameArray.count == 0 {
+            genericAlertView("😭😭😭", message: "No games found in \(searchBarCity)")
+        } else if RSSParser.gameArray.count >= 1 {
         for GamesToParse in RSSParser.gameArray {
             // print("For Loop \(GamesToParse.Title) lat \(GamesToParse.GameLat) lon \(GamesToParse.GameLong)")
             locManger.addMapPins(gameMap, lat: GamesToParse.GameLat, long: GamesToParse.GameLong, Title: GamesToParse.Title, game: GamesToParse)
         }
-        if RSSParser.gameArray.count == 0 {
-             genericAlertView("😭😭😭", message: "No games found in \(searchBarCity)")
-            
         }
+        
     }
  
 
@@ -224,25 +252,28 @@ class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpV
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        centerMapButton.enabled = false
         RSSParser.queryParseForGames()
         locManger.setUpLocationMonitoring()
-        gameMap.showsUserLocation = true
-        centerMapView()
         checkForLogin()
+        gameMap.showsUserLocation = true
+       
+        locManger.centerMapView(gameMap)
+        
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "currentLocationRecieved", name: "recievedLocationFromUser", object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "addGamesToMap", name: "parsedGameData", object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "searchCity", name: "recievedSearchedCityFromUser", object: nil)
         
-        //servManger.getGameLocation()
+        
         
     }
     
     override func viewDidAppear(animated: Bool) {
-        //placeLocationsOnMapViaParse(servManger.gameArray)
+        
     }
     override func viewDidDisappear(animated: Bool) {
-        // gameMap.removeAnnotation()
+        
     }
     
     override func didReceiveMemoryWarning() {

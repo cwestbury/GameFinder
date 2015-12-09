@@ -103,7 +103,6 @@ class rssParser: NSObject, NSXMLParserDelegate {
     
     func currentLocationNSURLString(){
         city = LocManager.userCity
-        //city = "annarbor"
         if city == "Washington" {
             city = "WashingtonDC"
         }
@@ -114,16 +113,38 @@ class rssParser: NSObject, NSXMLParserDelegate {
         
         
     }
+    func SearchCurrentLocation(URLRequest:NSURLRequest) {
+//        if searchedUrlString.relativeString == nil {
+//            rssUrlRequest = NSURLRequest(URL: currentLocationUrlString)
+//            print("Current Location String: \(currentLocationUrlString)")
+//            
+//        } else {
+//            rssUrlRequest = NSURLRequest(URL: searchedUrlString)
+//            print("Searched String: \(searchedUrlString)")
+//        }
+        let urlSession = NSURLSession.sharedSession()
+        let task = urlSession.dataTaskWithRequest(URLRequest) { (data, response, error) -> Void in
+            if data != nil {
+                print("Got XML Data")
+                self.xmlParser = NSXMLParser(data: data!)
+                self.xmlParser.delegate = self
+                self.xmlParser.parse()
+            } else {
+                print("Error Getting Data")
+            }
+        }
+        task.resume()
+        
+    }
     
     func getGameInfo() {
-        //print("Search String: \(searchedUrlString.relativeString)")
         if searchedUrlString.relativeString == nil {
             rssUrlRequest = NSURLRequest(URL: currentLocationUrlString)
-            //print("Current Location String: \(currentLocationUrlString)")
-            
+            print("Current Location String: \(currentLocationUrlString)")
+
         } else {
             rssUrlRequest = NSURLRequest(URL: searchedUrlString)
-           // print("Searched String: \(searchedUrlString)")
+           print("Searched String: \(searchedUrlString)")
         }
         let urlSession = NSURLSession.sharedSession()
         let task = urlSession.dataTaskWithRequest(rssUrlRequest) { (data, response, error) -> Void in
@@ -222,16 +243,7 @@ class rssParser: NSObject, NSXMLParserDelegate {
                // print("addGame to parse")
             }
             
-            
-            //checkForGames(searchedGameSavedToParse, SearchedGameArray: searchedGameArray)
-            
-            //print("Search Array count After Current Loc Search: \(searchedGameArray.count)")
-            
-            
-            
-            //servManager.saveGameFromWebsite(newGame.Title, gameDescription: cleanString, gameLat: newGame.GameLat, gameLong: newGame.GameLong)
-            //servManager.saveGameFromWebsite(newGame.Title, gameDescription: cleanString, gameCity: searchedCitySavedToParse, gameLat: newGame.GameLat, gameLong: newGame.GameLong) //but this only saves the last game?
-            
+        
             parsingAnItem = false
         }
     }

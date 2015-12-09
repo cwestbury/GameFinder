@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9060" systemVersion="15B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="KOF-qr-Oih">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9060" systemVersion="15B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="Bu7-V1-3OS">
     <dependencies>
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9051"/>
@@ -199,7 +199,7 @@
                                     <color key="titleColor" red="0.019940504804253578" green="0.0079427668824791908" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 </state>
                                 <connections>
-                                    <action selector="centerMapView" destination="BYZ-38-t0r" eventType="touchUpInside" id="1Kp-GS-vbC"/>
+                                    <action selector="SearchCurrentLocation" destination="BYZ-38-t0r" eventType="touchUpInside" id="q3U-3O-A2i"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -240,6 +240,7 @@
                     </navigationItem>
                     <connections>
                         <outlet property="LocationSearchBar" destination="6uq-Yq-sRg" id="Sg0-IS-4CA"/>
+                        <outlet property="centerMapButton" destination="zR4-TQ-vbI" id="kKF-3L-hbT"/>
                         <outlet property="gameMap" destination="EhV-dc-1ot" id="rB3-Fw-sBC"/>
                         <outlet property="loginButton" destination="viZ-wB-6hg" id="34N-bL-JZS"/>
                         <outlet property="settingsButton" destination="B12-FY-3hw" id="H0N-ga-hbj"/>
@@ -253,7 +254,7 @@
                     </connections>
                 </tapGestureRecognizer>
             </objects>
-            <point key="canvasLocation" x="1057" y="309"/>
+            <point key="canvasLocation" x="1124" y="359"/>
         </scene>
         <!--Title-->
         <scene sceneID="ZHe-oI-uJK">
@@ -543,17 +544,17 @@
                                 </constraints>
                                 <variation key="default">
                                     <mask key="constraints">
+                                        <exclude reference="5T5-CI-cVn"/>
+                                        <exclude reference="FEe-wx-OI5"/>
+                                        <exclude reference="eXW-p3-bek"/>
+                                        <exclude reference="jbo-rV-eXK"/>
+                                        <exclude reference="lar-k4-qWP"/>
                                         <exclude reference="BYW-ad-dpb"/>
                                         <exclude reference="CJz-sp-vDh"/>
                                         <exclude reference="fNQ-aA-n1h"/>
-                                        <exclude reference="lar-k4-qWP"/>
-                                        <exclude reference="jbo-rV-eXK"/>
-                                        <exclude reference="eXW-p3-bek"/>
-                                        <exclude reference="FEe-wx-OI5"/>
-                                        <exclude reference="5T5-CI-cVn"/>
                                         <exclude reference="u4T-3v-bSA"/>
-                                        <exclude reference="qhx-96-Fz2"/>
                                         <exclude reference="1ve-h4-gmU"/>
+                                        <exclude reference="qhx-96-Fz2"/>
                                     </mask>
                                 </variation>
                             </view>

@@ -12,6 +12,10 @@ import Parse
 class ParseLoginViewController: UIViewController {
     @IBOutlet weak var usernameField: UITextField!
     @IBOutlet weak var passwordField: UITextField!
+    
+    var RSSParser = rssParser.sharedInstance
+    var locManager = LocationManager.sharedInstance
+    
     @IBAction func loginAction(sender: AnyObject) {
         let username = self.usernameField.text
         let password = self.passwordField.text
@@ -40,17 +44,12 @@ class ParseLoginViewController: UIViewController {
 //                    alert.show()
                     
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                        print("\(PFUser.currentUser())")
-//                        let storyboard : UIStoryboard = storyboard
+                        print("Logged IN)")
                         let vc : ViewController = self.storyboard!.instantiateViewControllerWithIdentifier("MainView") as! ViewController
-                        //vc.teststring = "hello"
-                        
                         let navigationController = UINavigationController(rootViewController: vc)
                         
                         self.presentViewController(navigationController, animated: true, completion: nil)
-                        //presentViewController(, animated: <#T##Bool#>, completion: <#T##(() -> Void)?##(() -> Void)?##() -> Void#>)
-//                        let MainView = self.storyboard?.instantiateViewControllerWithIdentifier("MainView")
-//                        self.presentViewController(MainView!, animated: true, completion: nil)
+                        
                     })
                     
                 } else {
