@@ -18,13 +18,17 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
     @IBOutlet var nameLabel: UILabel!
     @IBOutlet var ageLabel: UILabel!
     @IBOutlet var genderLabel: UILabel!
-    @IBOutlet var experienceLabe: UILabel!
+    @IBOutlet var experienceLabel: UILabel!
     
     @IBOutlet var nameTextField: UITextField!
     @IBOutlet var ageTextField: UITextField!
-    @IBOutlet var genderTextField: UITextField!
+    @IBOutlet var genderSegControl: UISegmentedControl!
+    @IBOutlet var experienceSegControl: UISegmentedControl!
+    var gender = "Male"
+    var genderSegment = 0
+    var experience = "New"
+    var experienceSegment = 0
     var currentUser = PFUser.currentUser()
-    //@IBOutlet var picImageButton: UIButton!
     
     //MARK: - Save/Querry Server Methods
     
@@ -38,7 +42,9 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
             //        }
             uCurrentUser["Name"] = nameTextField.text
             //uCurrentUser["Age"] = ageTextField.text
-            //uCurrentUser["Gender"] = genderTextField.text
+            uCurrentUser["Gender"] = gender
+            uCurrentUser["Experience"] = experience
+    
             
             
             let imageData = UIImageJPEGRepresentation(profilePic.image!, 1.0)
@@ -58,7 +64,34 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         if let uCurrentUser = currentUser {
             currentUser = uCurrentUser
             
-            nameLabel.text! = (uCurrentUser["username"] as! String)
+            nameLabel.text! = (uCurrentUser["Name"] as! String)
+//            experience = (uCurrentUser["Experience"] as! String)
+//            gender = (uCurrentUser["Gender"] as! String)
+//            print("Got Gender: \(gender) & Experience: \(experience)")
+//            switch gender {
+//                case "Male":
+//                genderSegment = 0
+//                case "Female":
+//                genderSegment = 1
+//                case "Other":
+//                genderSegment = 2
+//            default:
+//                break;
+//            }
+//            switch experience {
+//            case "New":
+//                experienceSegment = 0
+//            case "Intermediate":
+//                experienceSegment = 1
+//            case "Experienced":
+//                experienceSegment = 2
+//            default:
+//                break;
+//            }
+//            
+//            genderSegControl.selectedSegmentIndex = genderSegment
+//            experienceSegControl.selectedSegmentIndex = experienceSegment
+            
             print("current user name: \(uCurrentUser["username"]as! String)")
             
             
@@ -78,6 +111,41 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
             print("No Current User")
 
         }
+    }
+    
+    @IBAction func SetGender(sender: UISegmentedControl) {
+        switch genderSegControl.selectedSegmentIndex
+        {
+        case 0:
+            gender = "Male"
+           print("Selected Gender: \(gender) ")
+        case 1:
+            gender = "Female"
+            print("Selected Gender: \(gender)")
+        case 2:
+            gender = "Other"
+            print("Selected Gender: \(gender)")
+        default:
+            break; 
+        }
+        
+    }
+    @IBAction func SetExp(sender: UISegmentedControl) {
+        switch experienceSegControl.selectedSegmentIndex
+        {
+        case 0:
+            experience = "New"
+            print("Selected Gender: \(experience) ")
+        case 1:
+            experience = "Intermediate"
+            print("Selected Gender: \(experience) ")
+        case 2:
+            experience = "Experienced"
+            print("Selected Gender: \(experience) ")
+        default:
+            break;
+        }
+        
     }
 
     //MARK: - Image Methods
@@ -112,6 +180,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
     override func viewDidLoad() {
         super.viewDidLoad()
         getInformationFromServer()
+        
         
         // Do any additional setup after loading the view.
     }

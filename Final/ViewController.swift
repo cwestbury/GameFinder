@@ -48,28 +48,26 @@ class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpV
     
     
     func checkForLogin(){
-        if let userName = currentUser?["Name"] as? String {
-        print("currentUsername: \(userName)")
-        if  userName == "" {
+        if currentUser == nil {
+            
+            loginButton.title = "Login"
+            loggedIN = false
+            settingsButton.enabled = false
+            settingsButton.title = ""
+            let LoginVC = self.storyboard?.instantiateViewControllerWithIdentifier("ParseLogin")
+            presentViewController(LoginVC!, animated: true, completion: nil)
+
+            
+        } else {
+            print("currentUsername: \(currentUser)")
             loginButton.title = "Logout"
             settingsButton.enabled = true
             settingsButton.title = "⚙"
             loggedIN = true
-        } else {
-           
-            
-            //print("\(currentUser!["Name"] as! String)Logged In")
+
         }
     }
-        loginButton.title = "Login"
-        loggedIN = false
-        settingsButton.enabled = false
-        settingsButton.title = ""
-        loginVC.delegate = self
-        signUpVC.delegate = self
-        loginVC.signUpController = signUpVC
-        presentViewController(loginVC, animated: true, completion: nil)
-    }
+        
     
     @IBAction func loginButtonPresesd(sender:UIBarButtonItem) {
         if let _ = PFUser.currentUser() {
@@ -80,10 +78,8 @@ class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpV
             
         } else {
             
-            loginVC.delegate = self
-            signUpVC.delegate = self
-            loginVC.signUpController = signUpVC
-            presentViewController(loginVC, animated: true, completion: nil)
+            let LoginVC = self.storyboard?.instantiateViewControllerWithIdentifier("ParseLogin")
+            presentViewController(LoginVC!, animated: true, completion: nil)
         }
     }
     
@@ -213,21 +209,8 @@ class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpV
             
         }
     }
-    //MARK: - KEEP FOR LATER????
     
-    ////    func placeLocationsOnMapViaParse(gameArray:[PFObject]) {
-    ////        for game in gameArray {
-    ////            let loc = game["GameCoords"] as! PFGeoPoint
-    ////            let gamePin = GamePointAnnotation()
-    ////            let coords = CLLocationCoordinate2DMake(loc.latitude, loc.longitude)
-    ////            gamePin.coordinate = coords
-    ////            gamePin.title = game["Title"] as? String
-    ////            //gamePin.subtitle = game["Descritpion"] as? String
-    //
-    //
-    //            gameMap.addAnnotation(gamePin)
-    //        }
-    //    }
+
     
     //MARK: - Alert View
     
