@@ -129,7 +129,7 @@
                                     </label>
                                 </subviews>
                                 <animations/>
-                                <color key="backgroundColor" red="0.6667017936706543" green="0.90634793043136597" blue="0.92838817834854126" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="backgroundColor" red="0.70980392156862748" green="0.92156862745098034" blue="0.94509803921568625" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstItem="kZV-Mj-qEi" firstAttribute="leading" secondItem="0iE-Mc-geD" secondAttribute="trailing" constant="-51" id="2wD-TS-DRr"/>
                                     <constraint firstItem="Qwp-Gk-5uv" firstAttribute="centerX" secondItem="acs-tf-rQ2" secondAttribute="centerX" id="3io-1u-36K"/>
@@ -311,43 +311,101 @@
                                 <animations/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="CustomCell" rowHeight="130" id="uS4-xT-k9v" customClass="CustomPlayerUITableView" customModule="Final" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="28" width="206" height="130"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="CustomCell" rowHeight="80" id="uS4-xT-k9v" customClass="CustomPlayerUITableViewCell" customModule="Final" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="28" width="206" height="80"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="uS4-xT-k9v" id="2lZ-mH-C6D">
-                                            <rect key="frame" x="0.0" y="0.0" width="206" height="129.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="206" height="79.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="iFo-Cf-ct2">
-                                                    <rect key="frame" x="0.0" y="-5" width="211" height="48.5"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Female" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="biD-Rs-NOo">
+                                                    <rect key="frame" x="92" y="35" width="61" height="14"/>
+                                                    <animations/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="61" id="myY-pf-FhD"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="10"/>
+                                                    <color key="textColor" red="0.089742444455623627" green="0.18035489320755005" blue="0.68997591733932495" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Exp: College" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yQM-bV-qRG">
+                                                    <rect key="frame" x="92" y="52" width="68" height="14"/>
+                                                    <animations/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="68" id="kEj-z6-ryF"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="10"/>
+                                                    <color key="textColor" red="0.089742444455623627" green="0.18035489320755005" blue="0.68997591733932495" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="TFZ-ft-s4T">
+                                                    <rect key="frame" x="0.0" y="0.0" width="80" height="80"/>
+                                                    <animations/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="80" id="ivo-f2-NST"/>
+                                                        <constraint firstAttribute="height" constant="79.5" id="zlJ-jA-vX5"/>
+                                                    </constraints>
+                                                </imageView>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Alexandra" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="QFB-PK-h1M">
+                                                    <rect key="frame" x="92" y="8" width="103" height="23.5"/>
+                                                    <animations/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="103" id="fXV-nv-VwT"/>
+                                                    </constraints>
+                                                    <fontDescription key="fontDescription" name="AvenirNext-Regular" family="Avenir Next" pointSize="17"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                            <animations/>
+                                            <color key="backgroundColor" red="0.86780029535293579" green="0.96512025594711304" blue="0.96562856435775757" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                            <constraints>
+                                                <constraint firstItem="yQM-bV-qRG" firstAttribute="top" secondItem="QFB-PK-h1M" secondAttribute="bottom" constant="21" id="FK6-I4-z4O"/>
+                                                <constraint firstItem="biD-Rs-NOo" firstAttribute="leading" secondItem="TFZ-ft-s4T" secondAttribute="trailing" constant="12" id="IbD-nS-Xmk"/>
+                                                <constraint firstItem="QFB-PK-h1M" firstAttribute="top" secondItem="2lZ-mH-C6D" secondAttribute="topMargin" id="Tnw-te-B9A"/>
+                                                <constraint firstItem="TFZ-ft-s4T" firstAttribute="top" secondItem="2lZ-mH-C6D" secondAttribute="topMargin" constant="-8" id="bgX-pg-nFu"/>
+                                                <constraint firstItem="biD-Rs-NOo" firstAttribute="top" secondItem="QFB-PK-h1M" secondAttribute="bottom" constant="3.5" id="eE0-sL-tyt"/>
+                                                <constraint firstItem="yQM-bV-qRG" firstAttribute="leading" secondItem="TFZ-ft-s4T" secondAttribute="trailing" constant="12" id="hQa-01-Zbp"/>
+                                                <constraint firstItem="QFB-PK-h1M" firstAttribute="leading" secondItem="2lZ-mH-C6D" secondAttribute="leadingMargin" constant="84" id="qSA-tX-oxD"/>
+                                                <constraint firstItem="TFZ-ft-s4T" firstAttribute="leading" secondItem="2lZ-mH-C6D" secondAttribute="leadingMargin" constant="-8" id="yaC-xQ-l0k"/>
+                                            </constraints>
+                                        </tableViewCellContentView>
+                                        <animations/>
+                                        <connections>
+                                            <outlet property="PlayerExpLabel" destination="yQM-bV-qRG" id="6CP-A2-v48"/>
+                                            <outlet property="PlayerGenderLabel" destination="biD-Rs-NOo" id="EXM-Rn-mLW"/>
+                                            <outlet property="PlayerImage" destination="TFZ-ft-s4T" id="wqP-c1-4UR"/>
+                                            <outlet property="PlayerNameLabel" destination="QFB-PK-h1M" id="fib-QQ-SpV"/>
+                                        </connections>
+                                    </tableViewCell>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="CustomMapCell" id="sf5-pd-Ac9" customClass="CustomPlayerUITableViewCell" customModule="Final" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="108" width="206" height="44"/>
+                                        <autoresizingMask key="autoresizingMask"/>
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="sf5-pd-Ac9" id="u04-An-dOL">
+                                            <rect key="frame" x="0.0" y="0.0" width="206" height="43.5"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="X3U-kH-ZfA">
+                                                    <rect key="frame" x="0.0" y="0.0" width="206" height="43.5"/>
                                                     <animations/>
                                                 </mapView>
-                                                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" editable="NO" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="Lux-bg-d6y">
-                                                    <rect key="frame" x="0.0" y="45" width="206" height="125"/>
-                                                    <animations/>
-                                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                                    <string key="text">Lorem ipsum dolor sit er elit lamet, consectetaur cillium adipisicing pecu, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum. Nam liber te conscient to factor tum poen legum odioque civiuda.</string>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                                    <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
-                                                    <dataDetectorType key="dataDetectorTypes" phoneNumber="YES" link="YES" address="YES"/>
-                                                </textView>
                                             </subviews>
                                             <animations/>
                                         </tableViewCellContentView>
                                         <animations/>
                                         <connections>
-                                            <outlet property="SingleGameMapView" destination="iFo-Cf-ct2" id="Z1Y-h3-quQ"/>
+                                            <outlet property="SingleGameMapView" destination="X3U-kH-ZfA" id="YP0-Jr-ssf"/>
                                         </connections>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cell" textLabel="E4i-wv-jJE" rowHeight="80" style="IBUITableViewCellStyleDefault" id="iCD-Wl-Zdr" customClass="CustomPlayerUITableView" customModule="Final" customModuleProvider="target">
-                                        <rect key="frame" x="0.0" y="158" width="206" height="80"/>
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="default" indentationWidth="10" reuseIdentifier="cell" textLabel="E4i-wv-jJE" style="IBUITableViewCellStyleDefault" id="iCD-Wl-Zdr" customClass="CustomPlayerUITableView" customModule="Final" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="152" width="206" height="44"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="iCD-Wl-Zdr" id="gEW-zA-kVR">
-                                            <rect key="frame" x="0.0" y="0.0" width="206" height="79.5"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="206" height="43.5"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="E4i-wv-jJE">
-                                                    <rect key="frame" x="15" y="0.0" width="176" height="79.5"/>
+                                                    <rect key="frame" x="15" y="0.0" width="176" height="43.5"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <animations/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="16"/>

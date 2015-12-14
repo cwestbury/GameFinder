@@ -12,6 +12,8 @@ import Parse
 class Player: NSObject {
     
     var userName: String!
+    var gender: String!
+    var experience: String!
     var playerName :String!
     var playerImage : UIImage!
     
