@@ -22,17 +22,8 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="acs-tf-rQ2">
                                 <rect key="frame" x="0.0" y="64" width="600" height="536"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0iE-Mc-geD">
-                                        <rect key="frame" x="258" y="8" width="126" height="30"/>
-                                        <animations/>
-                                        <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                        <state key="normal" title="Choose a Picture"/>
-                                        <connections>
-                                            <action selector="openPhotoLibraryButton:" destination="Kzx-Se-N0b" eventType="touchUpInside" id="k4b-4S-5LS"/>
-                                        </connections>
-                                    </button>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Ack-aS-9D0">
-                                        <rect key="frame" x="8" y="439" width="93" height="30"/>
+                                        <rect key="frame" x="108" y="486" width="93" height="30"/>
                                         <animations/>
                                         <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                         <state key="normal" title="Save to parse"/>
@@ -40,48 +31,26 @@
                                             <action selector="submitValuesToParse:" destination="Kzx-Se-N0b" eventType="touchUpInside" id="7em-ar-CH1"/>
                                         </connections>
                                     </button>
-                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="BlankUserImage" translatesAutoresizingMaskIntoConstraints="NO" id="kZV-Mj-qEi">
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="BlankUserImage" translatesAutoresizingMaskIntoConstraints="NO" id="kZV-Mj-qEi">
                                         <rect key="frame" x="0.0" y="0.0" width="244" height="244"/>
                                         <animations/>
                                     </imageView>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Name Label:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8VK-nR-hxA">
-                                        <rect key="frame" x="8" y="263" width="96" height="21"/>
-                                        <animations/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Gender Label:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="egA-j0-ePy">
-                                        <rect key="frame" x="8" y="305" width="108" height="21"/>
-                                        <animations/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Experience:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aCs-cu-LP3">
-                                        <rect key="frame" x="11" y="348" width="90" height="21"/>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Name:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8VK-nR-hxA">
+                                        <rect key="frame" x="8" y="304" width="50" height="21"/>
                                         <animations/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Age Label: " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="K10-rx-aiz">
-                                        <rect key="frame" x="11" y="387" width="85" height="21"/>
+                                        <rect key="frame" x="12" y="453" width="85" height="21"/>
                                         <animations/>
                                         <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                         <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <textField clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Enter Name!!" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Z4o-TX-zFY">
-                                        <rect key="frame" x="150" y="259" width="116" height="30"/>
-                                        <animations/>
-                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
-                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                        <textInputTraits key="textInputTraits"/>
-                                    </textField>
-                                    <segmentedControl opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="Mxp-HG-KfL">
-                                        <rect key="frame" x="140" y="302" width="281" height="29"/>
+                                    <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="Mxp-HG-KfL">
+                                        <rect key="frame" x="11" y="349" width="281" height="29"/>
                                         <animations/>
                                         <segments>
                                             <segment title="Male"/>
@@ -93,8 +62,8 @@
                                             <action selector="SetGender:" destination="Kzx-Se-N0b" eventType="valueChanged" id="1Ru-2U-e19"/>
                                         </connections>
                                     </segmentedControl>
-                                    <segmentedControl opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="Qwp-Gk-5uv">
-                                        <rect key="frame" x="109" y="345" width="275" height="29"/>
+                                    <segmentedControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="top" segmentControlStyle="plain" selectedSegmentIndex="0" translatesAutoresizingMaskIntoConstraints="NO" id="Qwp-Gk-5uv">
+                                        <rect key="frame" x="12" y="397" width="284" height="29"/>
                                         <animations/>
                                         <segments>
                                             <segment title="New"/>
@@ -107,7 +76,7 @@
                                         </connections>
                                     </segmentedControl>
                                     <textField clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Enter Age!!" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="1Cd-aR-qvN">
-                                        <rect key="frame" x="128" y="384" width="116" height="30"/>
+                                        <rect key="frame" x="119" y="448" width="116" height="30"/>
                                         <animations/>
                                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                                         <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -115,39 +84,63 @@
                                         <textInputTraits key="textInputTraits" keyboardType="numberPad"/>
                                     </textField>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="uOt-1F-ID9">
-                                        <rect key="frame" x="212" y="439" width="82" height="30"/>
+                                        <rect key="frame" x="12" y="486" width="82" height="30"/>
                                         <animations/>
                                         <state key="normal" title="Print details"/>
                                         <connections>
                                             <action selector="printDetails:" destination="Kzx-Se-N0b" eventType="touchUpInside" id="yvi-VU-Uc7"/>
                                         </connections>
                                     </button>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Age Label: " textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3wW-Pk-qbU">
-                                        <rect key="frame" x="238" y="387" width="85" height="21"/>
+                                    <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0iE-Mc-geD">
+                                        <rect key="frame" x="59" y="252" width="126" height="30"/>
                                         <animations/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
+                                        <color key="tintColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <state key="normal" title="Choose a Picture"/>
+                                        <connections>
+                                            <action selector="openPhotoLibraryButton:" destination="Kzx-Se-N0b" eventType="touchUpInside" id="k4b-4S-5LS"/>
+                                        </connections>
+                                    </button>
+                                    <textField clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Enter Name!!" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Z4o-TX-zFY">
+                                        <rect key="frame" x="85" y="300" width="116" height="30"/>
+                                        <animations/>
+                                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
+                                        <color key="textColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <textInputTraits key="textInputTraits"/>
+                                    </textField>
                                 </subviews>
                                 <animations/>
                                 <color key="backgroundColor" red="0.6667017936706543" green="0.90634793043136597" blue="0.92838817834854126" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstItem="0iE-Mc-geD" firstAttribute="top" secondItem="kZV-Mj-qEi" secondAttribute="bottom" constant="8" id="VNY-mj-CNW"/>
+                                </constraints>
                             </view>
                         </subviews>
                         <animations/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstAttribute="trailingMargin" secondItem="Qwp-Gk-5uv" secondAttribute="trailing" constant="284" id="8H9-yr-jTi"/>
+                            <constraint firstItem="YLx-Bf-cxd" firstAttribute="top" secondItem="0iE-Mc-geD" secondAttribute="bottom" constant="254" id="Bpa-AV-XDo"/>
+                            <constraint firstItem="kZV-Mj-qEi" firstAttribute="leading" secondItem="A3T-d4-h3z" secondAttribute="leadingMargin" constant="-20" id="C0t-YQ-lql"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="0iE-Mc-geD" secondAttribute="trailing" constant="395" id="Cno-r4-IVw"/>
+                            <constraint firstItem="YLx-Bf-cxd" firstAttribute="top" secondItem="kZV-Mj-qEi" secondAttribute="bottom" constant="292" id="DCA-Ni-812"/>
+                            <constraint firstItem="Qwp-Gk-5uv" firstAttribute="top" secondItem="ljc-ml-ebc" secondAttribute="bottom" constant="397" id="HuN-fT-27c"/>
+                            <constraint firstItem="0iE-Mc-geD" firstAttribute="leading" secondItem="A3T-d4-h3z" secondAttribute="leadingMargin" constant="39" id="L9d-gw-XSh"/>
                             <constraint firstAttribute="trailingMargin" secondItem="acs-tf-rQ2" secondAttribute="trailing" constant="-20" id="N8h-R3-vpd"/>
                             <constraint firstItem="acs-tf-rQ2" firstAttribute="leading" secondItem="A3T-d4-h3z" secondAttribute="leadingMargin" constant="-20" id="Ogn-z3-Vre"/>
                             <constraint firstItem="acs-tf-rQ2" firstAttribute="top" secondItem="ljc-ml-ebc" secondAttribute="bottom" id="Pku-pe-9ok"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="Mxp-HG-KfL" secondAttribute="trailing" constant="288" id="RDg-a9-48Q"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="kZV-Mj-qEi" secondAttribute="trailing" constant="336" id="WzD-GX-zD7"/>
+                            <constraint firstItem="kZV-Mj-qEi" firstAttribute="top" secondItem="ljc-ml-ebc" secondAttribute="bottom" id="e7z-ik-NG4"/>
+                            <constraint firstItem="Mxp-HG-KfL" firstAttribute="top" secondItem="ljc-ml-ebc" secondAttribute="bottom" constant="349" id="jZG-T2-Gsp"/>
+                            <constraint firstItem="Qwp-Gk-5uv" firstAttribute="leading" secondItem="A3T-d4-h3z" secondAttribute="leadingMargin" constant="-8" id="rHY-q1-iFT"/>
                             <constraint firstItem="YLx-Bf-cxd" firstAttribute="top" secondItem="acs-tf-rQ2" secondAttribute="bottom" id="weY-N6-bKg"/>
+                            <constraint firstItem="Mxp-HG-KfL" firstAttribute="leading" secondItem="A3T-d4-h3z" secondAttribute="leadingMargin" constant="-9" id="xxB-21-ThE"/>
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="ageLabel" destination="3wW-Pk-qbU" id="wNz-dc-XI5"/>
                         <outlet property="ageTextField" destination="1Cd-aR-qvN" id="9qz-Mf-J2n"/>
                         <outlet property="experienceSegControl" destination="Qwp-Gk-5uv" id="EKB-eq-MdV"/>
-                        <outlet property="genderLabel" destination="egA-j0-ePy" id="tVX-zl-3y2"/>
                         <outlet property="genderSegControl" destination="Mxp-HG-KfL" id="reU-Sh-BEW"/>
                         <outlet property="nameLabel" destination="8VK-nR-hxA" id="get-xY-ElA"/>
                         <outlet property="nameTextField" destination="Z4o-TX-zFY" id="SMp-31-ukD"/>

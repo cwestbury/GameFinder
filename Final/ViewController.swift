@@ -186,9 +186,10 @@ class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpV
     
     @IBAction func SearchCurrentLocation() {
         LocationSearchBar.text = ""
-        searchBarCity = locManger.userCity
+        searchBarCity = locManger.userCurrentCity
         
-        var city = locManger.userCity
+        var city = locManger.userCurrentCity
+        print("\(city)")
         if city == "Washington" {
             city = "WashingtonDC"
         }

@@ -102,7 +102,7 @@ class rssParser: NSObject, NSXMLParserDelegate {
     }
     
     func currentLocationNSURLString(){
-        city = LocManager.userCity
+        city = LocManager.userCurrentCity
         if city == "Washington" {
             city = "WashingtonDC"
         }

@@ -63,7 +63,7 @@ class serverManager: NSObject {
         let query = PFQuery(className:"Game")
         let userGeoPoint = PFGeoPoint(latitude: locManager.userLocationCoordinates.latitude, longitude: locManager.userLocationCoordinates.longitude)
         query.whereKey("GameCoords", nearGeoPoint:userGeoPoint)
-        query.limit = 10
+        query.limit = 30
         do {
             try gameArray = query.findObjects()
             

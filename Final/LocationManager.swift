@@ -17,41 +17,45 @@ class LocationManager: NSObject, CLLocationManagerDelegate, MKMapViewDelegate {
     
     
     static let sharedInstance = LocationManager()
+    
     var locationManager: CLLocationManager = CLLocationManager()
+    
     var userLocationCoordinates = CLLocationCoordinate2D()
-    var userCity: String!
+    var userCurrentCity: String!
+    
     var searchedCity: String!
     var searchedCityLocation: CLLocationCoordinate2D!
-    var searchedCityLat: Double!
-    var searchedCityLong: Double!
-    
+
     //MARK: - Location Searching
     
     func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         
         if (userLocationCoordinates.latitude == 0 && userLocationCoordinates.longitude == 0) {
-            let locValue:CLLocationCoordinate2D = manager.location!.coordinate
-            userLocationCoordinates = CLLocationCoordinate2D(latitude: locations.last!.coordinate.latitude, longitude:locations.last!.coordinate.longitude)
-           // print("Location Manager: User location = Lat: \(locValue.latitude) Long: \(locValue.longitude)")
-            let location = CLLocation(latitude: locValue.latitude, longitude: locValue.longitude)
-            CLGeocoder().reverseGeocodeLocation(location, completionHandler: {(placemarks, error) -> Void in
-                if error != nil {
-                    print("Reverse geocoder failed with error" + error!.localizedDescription)
-                    return
-                }
-                if placemarks!.count > 0 {
-                    let pm = placemarks![0]
-                    self.userCity = pm.locality!
-                    print(pm.locality!)
-                    
-                    dispatch_async(dispatch_get_main_queue()){
-                        NSNotificationCenter.defaultCenter().postNotification(NSNotification(name: "recievedLocationFromUser", object: nil))
+            if let locValue:CLLocationCoordinate2D = manager.location?.coordinate {
+                userLocationCoordinates = CLLocationCoordinate2D(latitude: locations.last!.coordinate.latitude, longitude:locations.last!.coordinate.longitude)
+                // print("Location Manager: User location = Lat: \(locValue.latitude) Long: \(locValue.longitude)")
+                let location = CLLocation(latitude: locValue.latitude, longitude: locValue.longitude)
+                CLGeocoder().reverseGeocodeLocation(location, completionHandler: {(placemarks, error) -> Void in
+                    if error != nil {
+                        print("Reverse geocoder failed with error" + error!.localizedDescription)
+                        return
                     }
-                    
-                } else {
-                    print("Problem with the data received from geocoder")
-                }
-            })
+                    if placemarks!.count > 0 {
+                        let pm = placemarks![0]
+                        self.userCurrentCity = pm.locality!
+                        print(pm.locality!)
+                        
+                        dispatch_async(dispatch_get_main_queue()){
+                            NSNotificationCenter.defaultCenter().postNotification(NSNotification(name: "recievedLocationFromUser", object: nil))
+                        }
+                        
+                    } else {
+                        print("Problem with the data received from geocoder")
+                    }
+                })
+            } else {
+                print("No User location")
+            }
         }
         
     }
@@ -67,8 +71,8 @@ class LocationManager: NSObject, CLLocationManagerDelegate, MKMapViewDelegate {
                 dispatch_async(dispatch_get_main_queue()){
                     NSNotificationCenter.defaultCenter().postNotification(NSNotification(name: "recievedSearchedCityFromUser", object: nil))
                 }
-
-
+                
+                
             }
         }
     }
@@ -114,11 +118,14 @@ class LocationManager: NSObject, CLLocationManagerDelegate, MKMapViewDelegate {
     
     func centerMapView(map:MKMapView) {
         //print("AddGame: Center Map View Running")
-        let currentLocaiton = locationManager.location!.coordinate
-        print(currentLocaiton)
-        let center = CLLocationCoordinate2DMake(currentLocaiton.latitude, currentLocaiton.longitude)
-        let region = MKCoordinateRegion(center: center, span: MKCoordinateSpan(latitudeDelta: 0.0675, longitudeDelta: 0.0675))
-        map.setRegion(region, animated: true)
+        if let currentLocaiton = locationManager.location?.coordinate {
+            print(currentLocaiton)
+            let center = CLLocationCoordinate2DMake(currentLocaiton.latitude, currentLocaiton.longitude)
+            let region = MKCoordinateRegion(center: center, span: MKCoordinateSpan(latitudeDelta: 0.0675, longitudeDelta: 0.0675))
+            map.setRegion(region, animated: true)
+        }else {
+            print("no location")
+        }
     }
     func centerMapOnSearch(map:MKMapView) {
         let center = CLLocationCoordinate2D(latitude:searchedCityLocation.latitude , longitude: searchedCityLocation.longitude)
@@ -135,7 +142,5 @@ class LocationManager: NSObject, CLLocationManagerDelegate, MKMapViewDelegate {
         map.addAnnotation(gamePin)
         
     }
-    
-    
     
 }
