@@ -10,14 +10,14 @@ import UIKit
 import MapKit
 
 class CustomPlayerUITableView: UITableViewCell, MKMapViewDelegate {
-    @IBOutlet var GameDescriptionTextView: UITextView!
+    //@IBOutlet var GameDescriptionTextView: UITextView!
     
-    @IBOutlet var SingleGameMapView:MKMapView!
+    //@IBOutlet var SingleGameMapView:MKMapView!
     
     @IBOutlet var PlayerNameLabel: UILabel!
     @IBOutlet var PlayerImage: UIImage!
     @IBOutlet var PlayerExpLabel: UILabel!
-    @IBOutlet var PlayerAgeLabel: UILabel!
+    @IBOutlet var PlayerGenderLabel: UILabel!
 
 
     

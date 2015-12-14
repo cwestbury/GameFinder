@@ -14,19 +14,16 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
     
     //MARK: - Properties
     @IBOutlet var profilePic: UIImageView!
+    @IBOutlet var ratingLabel: UILabel!
     
-    @IBOutlet var nameLabel: UILabel!
-    @IBOutlet var ageLabel: UILabel!
-    @IBOutlet var genderLabel: UILabel!
-    @IBOutlet var experienceLabel: UILabel!
+    @IBOutlet var NavBarTitle: UINavigationItem!
     
     @IBOutlet var nameTextField: UITextField!
-    @IBOutlet var ageTextField: UITextField!
     @IBOutlet var genderSegControl: UISegmentedControl!
     @IBOutlet var experienceSegControl: UISegmentedControl!
     var gender = "Male"
     var genderSegment = 0
-    var experience = "New"
+    var experience = "Pickup"
     var experienceSegment = 0
     var currentUser = PFUser.currentUser()
     
@@ -38,20 +35,18 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         if let uCurrentUser = currentUser {
             currentUser = uCurrentUser
             
-            //            objectToSave = PFObject(className: "Places")
-            //        }
             uCurrentUser["Name"] = nameTextField.text
-            //uCurrentUser["Age"] = ageTextField.text
             uCurrentUser["Gender"] = gender
             uCurrentUser["Experience"] = experience
     
-            
-            
+
             let imageData = UIImageJPEGRepresentation(profilePic.image!, 1.0)
             let imageFile = PFFile(name:"\(nameTextField.text!)ProfilePicture.png", data:imageData!)
             uCurrentUser["imageName"] = "\(nameTextField.text!)Picture"
             uCurrentUser["imageFile"] = imageFile
+            
             uCurrentUser.saveInBackground()
+            
             print("saved to parse")
             self.navigationController!.popToRootViewControllerAnimated(true)
         }
@@ -64,7 +59,9 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         if let uCurrentUser = currentUser {
             currentUser = uCurrentUser
             
-            nameLabel.text! = (uCurrentUser["Name"] as! String)
+             NavBarTitle.title! = (uCurrentUser["Name"] as! String)
+           
+            
 //            experience = (uCurrentUser["Experience"] as! String)
 //            gender = (uCurrentUser["Gender"] as! String)
 //            print("Got Gender: \(gender) & Experience: \(experience)")
@@ -79,11 +76,11 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
 //                break;
 //            }
 //            switch experience {
-//            case "New":
+//            case "PickUp":
 //                experienceSegment = 0
-//            case "Intermediate":
+//            case "College":
 //                experienceSegment = 1
-//            case "Experienced":
+//            case "Club":
 //                experienceSegment = 2
 //            default:
 //                break;
@@ -164,7 +161,9 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
     func imagePickerController(picker: UIImagePickerController, didFinishPickingImage image: UIImage!, editingInfo: [NSObject : AnyObject]!) {
         //print("picked Image")
         profilePic.image = image
-        self.dismissViewControllerAnimated(true, completion: nil);
+        self.dismissViewControllerAnimated(true, completion: nil)
+        ratingLabel.hidden = false
+        
     }
     
     //MARK: - Alert View
@@ -179,6 +178,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        ratingLabel.hidden = true
         getInformationFromServer()
         
         

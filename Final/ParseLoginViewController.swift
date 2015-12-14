@@ -20,7 +20,7 @@ class ParseLoginViewController: UIViewController {
         let username = self.usernameField.text
         let password = self.passwordField.text
         
-         //MARK: - Validation
+        //MARK: - Validation + Login
         
         if username!.characters.count < 3
             
@@ -33,15 +33,13 @@ class ParseLoginViewController: UIViewController {
         } else {
             let spinner: UIActivityIndicatorView = UIActivityIndicatorView(frame: CGRectMake(0, 0, 150, 150)) as UIActivityIndicatorView
             spinner.startAnimating()
-            
-            // Send a request to login
             PFUser.logInWithUsernameInBackground(username!, password: password!, block: { (user, error) -> Void in
                 
                 spinner.stopAnimating()
                 
                 if ((user) != nil) {
-//                    let alert = UIAlertView(title: "Success", message: "Logged In", delegate: self, cancelButtonTitle: "OK")
-//                    alert.show()
+                    //                    let alert = UIAlertView(title: "Success", message: "Logged In", delegate: self, cancelButtonTitle: "OK")
+                    //                    alert.show()
                     
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
                         print("Logged IN)")
@@ -54,10 +52,14 @@ class ParseLoginViewController: UIViewController {
                     
                 } else {
                     self.genericAlertView("Error", message: "\(error)")
-                   
+                    
                 }
             })
         }
+    }
+    //MARK: - Set Login
+    func saveLogin() {
+        
     }
     
     //MARK: - Alert View
@@ -78,6 +80,6 @@ class ParseLoginViewController: UIViewController {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-
-
+    
+    
 }

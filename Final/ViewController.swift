@@ -44,6 +44,22 @@ class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpV
         }
     }
     
+    @IBAction func SearchCurrentLocation() {
+        LocationSearchBar.text = ""
+        searchBarCity = locManger.userCurrentCity
+        
+        let city = locManger.userCurrentCity
+        print("\(city)")
+        
+        let url = NSURL(string: "http://pickupultimate.com/rss/city/\(city)")!
+        let URLRequest = NSURLRequest(URL: url)
+        RSSParser.SearchCurrentLocation(URLRequest)
+        
+        locManger.centerMapView(gameMap)
+        
+    }
+
+    
     
     //MARK: - Parse Login Methods
     
@@ -84,27 +100,27 @@ class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpV
         }
     }
     
-    func logInViewController(logInController: PFLogInViewController, didLogInUser user: PFUser) {
-        dismissViewControllerAnimated(true, completion: nil)
-        settingsButton.enabled = true
-        settingsButton.title = "⚙"
-        loginButton.title = "Log Out"
-        loggedIN = true
-        
-    }
-    
-    
-    func logInViewControllerDidCancelLogIn(logInController: PFLogInViewController) {
-        dismissViewControllerAnimated(true, completion: nil)
-    }
-    
-    func signUpViewController(signUpController: PFSignUpViewController, didSignUpUser user: PFUser) {
-        dismissViewControllerAnimated(true, completion: nil)
-    }
-    func signUpViewControllerDidCancelSignUp(signUpController: PFSignUpViewController) {
-        dismissViewControllerAnimated(true, completion: nil)
-        checkForLogin()
-    }
+//    func logInViewController(logInController: PFLogInViewController, didLogInUser user: PFUser) {
+//        dismissViewControllerAnimated(true, completion: nil)
+//        settingsButton.enabled = true
+//        settingsButton.title = "⚙"
+//        loginButton.title = "Log Out"
+//        loggedIN = true
+//        
+//    }
+//    
+//    
+//    func logInViewControllerDidCancelLogIn(logInController: PFLogInViewController) {
+//        dismissViewControllerAnimated(true, completion: nil)
+//    }
+//    
+//    func signUpViewController(signUpController: PFSignUpViewController, didSignUpUser user: PFUser) {
+//        dismissViewControllerAnimated(true, completion: nil)
+//    }
+//    func signUpViewControllerDidCancelSignUp(signUpController: PFSignUpViewController) {
+//        dismissViewControllerAnimated(true, completion: nil)
+//        checkForLogin()
+//    }
     
     //MARK: - Search Bar Methods
     
@@ -138,11 +154,11 @@ class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpV
         locManger.centerMapOnSearch(gameMap)
     }
     
+    
 
     //MARK: - Map Methods
     
-   
-    
+
     func mapView(mapView: MKMapView, viewForAnnotation annotation: MKAnnotation) -> MKAnnotationView? {
         if annotation.isMemberOfClass(MKUserLocation.self) {
             return nil
@@ -179,39 +195,15 @@ class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpV
     }
 
     func currentLocationRecieved() {
-        print("CurrentLocation Recived")
+        print("Current Location Recived")
         RSSParser.currentLocationNSURLString()
         RSSParser.getGameInfo()
+        centerMapButton.enabled = true
     }
     
-    @IBAction func SearchCurrentLocation() {
-        LocationSearchBar.text = ""
-        searchBarCity = locManger.userCurrentCity
-        
-        var city = locManger.userCurrentCity
-        print("\(city)")
-        if city == "Washington" {
-            city = "WashingtonDC"
-        }
-        
-//        var NSUrl = NSURL()
-//        URLRequest = NSURLRequst(
-        let url = NSURL(string: "http://pickupultimate.com/rss/city/\(city)")!
-        let URLRequest = NSURLRequest(URL: url)
-        //let URLRequest = (NSURL: "http://pickupultimate.com/rss/city/\(city)")
-        RSSParser.SearchCurrentLocation(URLRequest)
-        
-        
-        //currentLocationRecieved()
-        //        RSSParser.currentLocationNSURLString()
-        //        RSSParser.getGameInfo()
-        locManger.centerMapView(gameMap)
-        
-    }
     
     
     func addGamesToMap() {
-        centerMapButton.enabled = true
         removePins()
         print("adding XML parsed Games")
         print("Game count: \(RSSParser.gameArray.count)")
@@ -228,7 +220,6 @@ class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpV
         
     }
  
-
     //MARK: - Segue Methods
     
     override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
@@ -239,7 +230,6 @@ class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpV
         }
     }
     
-
     
     //MARK: - Alert View
     
@@ -253,10 +243,11 @@ class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpV
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        checkForLogin()
         centerMapButton.enabled = false
         RSSParser.queryParseForGames()
         locManger.setUpLocationMonitoring()
-        checkForLogin()
+        
         gameMap.showsUserLocation = true
        
         locManger.centerMapView(gameMap)
@@ -265,8 +256,6 @@ class ViewController: UIViewController, PFLogInViewControllerDelegate, PFSignUpV
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "currentLocationRecieved", name: "recievedLocationFromUser", object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "addGamesToMap", name: "parsedGameData", object: nil)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "searchCity", name: "recievedSearchedCityFromUser", object: nil)
-        
-        
         
     }
     

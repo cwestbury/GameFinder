@@ -114,18 +114,10 @@ class rssParser: NSObject, NSXMLParserDelegate {
         
     }
     func SearchCurrentLocation(URLRequest:NSURLRequest) {
-//        if searchedUrlString.relativeString == nil {
-//            rssUrlRequest = NSURLRequest(URL: currentLocationUrlString)
-//            print("Current Location String: \(currentLocationUrlString)")
-//            
-//        } else {
-//            rssUrlRequest = NSURLRequest(URL: searchedUrlString)
-//            print("Searched String: \(searchedUrlString)")
-//        }
+
         let urlSession = NSURLSession.sharedSession()
         let task = urlSession.dataTaskWithRequest(URLRequest) { (data, response, error) -> Void in
             if data != nil {
-                print("Got XML Data")
                 self.xmlParser = NSXMLParser(data: data!)
                 self.xmlParser.delegate = self
                 self.xmlParser.parse()
@@ -134,10 +126,12 @@ class rssParser: NSObject, NSXMLParserDelegate {
             }
         }
         task.resume()
+        print("Got Current Loc XML Data")
         
     }
     
     func getGameInfo() {
+        print("Get Game Info Running")
         if searchedUrlString.relativeString == nil {
             rssUrlRequest = NSURLRequest(URL: currentLocationUrlString)
             print("Current Location String: \(currentLocationUrlString)")
@@ -149,7 +143,7 @@ class rssParser: NSObject, NSXMLParserDelegate {
         let urlSession = NSURLSession.sharedSession()
         let task = urlSession.dataTaskWithRequest(rssUrlRequest) { (data, response, error) -> Void in
             if data != nil {
-                print("Got XML Data")
+                print("Got searched Loc XML Data")
                 self.xmlParser = NSXMLParser(data: data!)
                 self.xmlParser.delegate = self
                 self.xmlParser.parse()
