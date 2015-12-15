@@ -139,7 +139,7 @@ class ParseSignUpViewController: UIViewController, UIImagePickerControllerDelega
             gender = "Other"
             print("Selected Gender: \(gender)")
         default:
-            break;
+            break
         }
         
     }
@@ -156,7 +156,7 @@ class ParseSignUpViewController: UIViewController, UIImagePickerControllerDelega
             experience = "Club"
             print("Selected Gender: \(experience) ")
         default:
-            break;
+            break
         }
         
     }

@@ -7,12 +7,9 @@
 //
 
 import UIKit
-import MapKit
 
-class CustomPlayerUITableViewCell: UITableViewCell, MKMapViewDelegate {
+class CustomPlayerUITableViewCell: UITableViewCell {
     //@IBOutlet var GameDescriptionTextView: UITextView!
-    
-    @IBOutlet var SingleGameMapView:MKMapView!
     
     @IBOutlet var PlayerNameLabel: UILabel!
     @IBOutlet var PlayerImage: UIImageView!

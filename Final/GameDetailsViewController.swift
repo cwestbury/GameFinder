@@ -21,16 +21,13 @@ class GameDetailsViewController: UIViewController, MKMapViewDelegate, UITableVie
     
     var playerUsernameArray  = [String]()
     
-    @IBOutlet var SingleGameMap: MKMapView!
-    @IBOutlet var GameDescription: UITextView!
+    var height = 0.0 as CGFloat
+    
     @IBOutlet var NavBarTitle: UINavigationItem!
     @IBOutlet var attendanceSwitch: UISwitch!
     
     let locManager = LocationManager.sharedInstance
     var selectedGame :Games!
-    
-    var cleanString: String!
-    var dirtyString: String!
     
     let currentUser = PFUser.currentUser()
     var parseGame = PFObject(className: "Games")
@@ -95,39 +92,86 @@ class GameDetailsViewController: UIViewController, MKMapViewDelegate, UITableVie
     
     
     //MARK: - TableView Methods
+    func numberOfSectionsInTableView(tableView: UITableView) -> Int {
+        return 3
+    }
+
     func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return "Attending This Week: \(playersArray.count)"
+        switch section {
+        case 0:
+            return "Map"
+        case 1:
+            return " Game Description"
+        case 2:
+            return "Attending This Week: \(playersArray.count)"
+        default:
+            return "Uknown"
+        }
+        
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let CustomPlayerCell : CustomPlayerUITableViewCell = tableView.dequeueReusableCellWithIdentifier("CustomCell") as! CustomPlayerUITableViewCell
-        CustomPlayerCell.PlayerGenderLabel.text = playersArray[indexPath.row].gender
-        CustomPlayerCell.PlayerExpLabel.text = "Exp:" + playersArray[indexPath.row].experience
-        CustomPlayerCell.PlayerNameLabel.text = playersArray[indexPath.row].playerName
-        CustomPlayerCell.PlayerImage.image = playersArray[indexPath.row].playerImage
+        if indexPath.section == 0  {
+            let mapCell = tableView.dequeueReusableCellWithIdentifier("MapCell") as! CustomMapTableViewCell
+            removePins(mapCell.SingleGameMapView)
+            
+            addGameToMap(mapCell.SingleGameMapView)
+            centerMapOnSearch(mapCell.SingleGameMapView)
+
+            mapCell.SingleGameMapView.mapType = .Hybrid
+            mapCell.selectionStyle = .None
+            
+            return mapCell
+            
+        } else if indexPath.section == 1 {
+            // REPLACE WITH DESC CELL
+            let gameDescriptionCell = tableView.dequeueReusableCellWithIdentifier("TextCell") as! CustomTextViewTableViewCell
+            //GameDescription.font = UIFont(name: "Damascus", size: 20.0)
         
-        
-        
-        //        MapCell.SingleGameMapView = SingleGameMap
-        //
-        //        let DescCell : CustomDescriptionCell = tableView.dequeueReusableCellWithIdentifier("DescCell") as! CustomDescriptionCell
-        //        DescCell.GameDescriptionTextView.text! = selectedGame.GameDescription
-        //
-        let cell = tableView.dequeueReusableCellWithIdentifier("cell")! as UITableViewCell
-        
-        cell.textLabel?.text = playersArray[indexPath.row].playerName
-        cell.imageView?.image = playersArray[indexPath.row].playerImage
-       
-        return CustomPlayerCell
+
+            gameDescriptionCell.GameDescriptionTextView.text = selectedGame.GameDescription
+            height = gameDescriptionCell.GameDescriptionTextView.bounds.height
+            return gameDescriptionCell
+            
+        } else {
+            let CustomPlayerCell : CustomPlayerUITableViewCell = tableView.dequeueReusableCellWithIdentifier("CustomCell") as! CustomPlayerUITableViewCell
+            CustomPlayerCell.PlayerGenderLabel.text = playersArray[indexPath.row].gender
+            CustomPlayerCell.PlayerExpLabel.text = "Exp: " + playersArray[indexPath.row].experience
+            CustomPlayerCell.PlayerNameLabel.text = playersArray[indexPath.row].playerName
+            CustomPlayerCell.PlayerImage.image = playersArray[indexPath.row].playerImage
+            return CustomPlayerCell
+        }
         
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // print("TableView Rows Count: \(playersArray.count)")
-        return playersArray.count
+        if section == 2 {
+            return playersArray.count
+        } else {
+            return 1
+        }
     }
     
+    func tableView(tableView: UITableView, estimatedHeightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        if indexPath.section == 0 {
+            return 250.0
+        } else if indexPath.section == 1 {
+            return 100.0
+        } else {
+            return 80.0
+        }
+    }
+    
+
+    
     //MARK: - Map Functions
+    
+    func removePins(mapView: MKMapView) {
+        var pins: [MKAnnotation] = NSArray(array: mapView.annotations) as! [MKAnnotation]
+        mapView.removeAnnotations(pins)
+        pins.removeAll()
+    }
     
     func openAppleMaps(){
         
@@ -163,15 +207,16 @@ class GameDetailsViewController: UIViewController, MKMapViewDelegate, UITableVie
         }
     }
     
-    func centerMapOnSearch() {
+    func centerMapOnSearch(map:MKMapView) {
         let center = CLLocationCoordinate2D(latitude:selectedGame.GameLat , longitude: selectedGame.GameLong)
-        let region = MKCoordinateRegion(center: center, span: MKCoordinateSpan(latitudeDelta: 0.002, longitudeDelta: 0.002))
-        SingleGameMap.setRegion(region, animated: true)
+        let region = MKCoordinateRegion(center: center, span: MKCoordinateSpan(latitudeDelta: 0.001, longitudeDelta: 0.001))
+        map.setRegion(region, animated: true)
     }
     
-    func addGameToMap(){
-        locManager.addMapPins(SingleGameMap, lat: selectedGame.GameLat, long: selectedGame.GameLong, Title: "Route", game: selectedGame)
+    func addGameToMap(map:MKMapView){
+        locManager.addMapPins(map, lat: selectedGame.GameLat, long: selectedGame.GameLong, Title: "Route", game: selectedGame)
     }
+ 
     
     
     func mapView(mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
@@ -267,21 +312,13 @@ class GameDetailsViewController: UIViewController, MKMapViewDelegate, UITableVie
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        SingleGameMap.mapType = .Hybrid
-        addGameToMap()
-        centerMapOnSearch()
+        
         NavBarTitle.title = selectedGame.Title!
-        
-        GameDescription.font = UIFont(name: "Damascus", size: 20.0)
-        GameDescription.text = selectedGame.GameDescription
-        GameDescription.contentOffset = CGPoint.zero
-        
-        self.playersTableView.rowHeight = 80
         QueryParseForCurrentGame()
-        //print(playersArray)
-        //print("Players Array Count: \(playersArray.count)")
         
-        
+        playersTableView.estimatedRowHeight = 100.0
+        playersTableView.rowHeight = UITableViewAutomaticDimension
+   
     }
     
     override func didReceiveMemoryWarning() {

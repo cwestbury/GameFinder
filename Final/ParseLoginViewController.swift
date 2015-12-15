@@ -42,11 +42,8 @@ class ParseLoginViewController: UIViewController {
                     //                    alert.show()
                     
                     dispatch_async(dispatch_get_main_queue(), { () -> Void in
-                        print("Logged IN)")
-                        let vc : ViewController = self.storyboard!.instantiateViewControllerWithIdentifier("MainView") as! ViewController
-                        let navigationController = UINavigationController(rootViewController: vc)
-                        
-                        self.presentViewController(navigationController, animated: true, completion: nil)
+                        //print("\(PFUser.currentUser()!.username!)")
+                        self.navigationController!.popToRootViewControllerAnimated(true)
                         
                     })
                     
@@ -57,11 +54,7 @@ class ParseLoginViewController: UIViewController {
             })
         }
     }
-    //MARK: - Set Login
-    func saveLogin() {
-        
-    }
-    
+ 
     //MARK: - Alert View
     
     func genericAlertView(title:String, message:String) {

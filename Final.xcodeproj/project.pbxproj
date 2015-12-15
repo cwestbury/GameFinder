@@ -23,6 +23,8 @@
 		7EB528911C0C9EE9006966D9 /* MapKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7EB528901C0C9EE9006966D9 /* MapKit.framework */; };
 		7EB528951C0CA55D006966D9 /* LocationManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EB528941C0CA55D006966D9 /* LocationManager.swift */; };
 		7EB528971C0CA664006966D9 /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7EB528961C0CA664006966D9 /* CoreLocation.framework */; };
+		7ED6D42F1C1F5B2B000D4DDB /* CustomMapTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ED6D42E1C1F5B2B000D4DDB /* CustomMapTableViewCell.swift */; };
+		7ED6D4311C1F5B3C000D4DDB /* CustomTextViewTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7ED6D4301C1F5B3C000D4DDB /* CustomTextViewTableViewCell.swift */; };
 		7EE858F11C17515600618ABC /* CustomPlayerUITableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE858F01C17515600618ABC /* CustomPlayerUITableView.swift */; };
 		7EE858FC1C18A9D700618ABC /* ParseLoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE858FB1C18A9D700618ABC /* ParseLoginViewController.swift */; };
 		7EE858FE1C18AE4A00618ABC /* ParseSignUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7EE858FD1C18AE4A00618ABC /* ParseSignUpViewController.swift */; };
@@ -50,6 +52,8 @@
 		7EB528901C0C9EE9006966D9 /* MapKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MapKit.framework; path = System/Library/Frameworks/MapKit.framework; sourceTree = SDKROOT; };
 		7EB528941C0CA55D006966D9 /* LocationManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LocationManager.swift; sourceTree = "<group>"; };
 		7EB528961C0CA664006966D9 /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		7ED6D42E1C1F5B2B000D4DDB /* CustomMapTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomMapTableViewCell.swift; sourceTree = "<group>"; };
+		7ED6D4301C1F5B3C000D4DDB /* CustomTextViewTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomTextViewTableViewCell.swift; sourceTree = "<group>"; };
 		7EE858F01C17515600618ABC /* CustomPlayerUITableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomPlayerUITableView.swift; sourceTree = "<group>"; };
 		7EE858FB1C18A9D700618ABC /* ParseLoginViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParseLoginViewController.swift; sourceTree = "<group>"; };
 		7EE858FD1C18AE4A00618ABC /* ParseSignUpViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ParseSignUpViewController.swift; sourceTree = "<group>"; };
@@ -115,13 +119,23 @@
 				7EE858F91C18A98000618ABC /* Objects */,
 				7EE858F81C18A95D00618ABC /* Managers */,
 				7E157E1D1C04D0B200474796 /* Main.storyboard */,
-				7EE858F01C17515600618ABC /* CustomPlayerUITableView.swift */,
+				7ED6D4321C1F62A3000D4DDB /* Cells */,
 				7E157E231C04D0B200474796 /* Assets.xcassets */,
 				7E157E251C04D0B200474796 /* LaunchScreen.storyboard */,
 				7E157E281C04D0B200474796 /* Info.plist */,
 				7E157E201C04D0B200474796 /* Final.xcdatamodeld */,
 			);
 			path = Final;
+			sourceTree = "<group>";
+		};
+		7ED6D4321C1F62A3000D4DDB /* Cells */ = {
+			isa = PBXGroup;
+			children = (
+				7EE858F01C17515600618ABC /* CustomPlayerUITableView.swift */,
+				7ED6D42E1C1F5B2B000D4DDB /* CustomMapTableViewCell.swift */,
+				7ED6D4301C1F5B3C000D4DDB /* CustomTextViewTableViewCell.swift */,
+			);
+			name = Cells;
 			sourceTree = "<group>";
 		};
 		7EE858F81C18A95D00618ABC /* Managers */ = {
@@ -296,6 +310,8 @@
 				7EE858FE1C18AE4A00618ABC /* ParseSignUpViewController.swift in Sources */,
 				7E2907911C0F7BF000CF7CA3 /* GameDetailsViewController.swift in Sources */,
 				7E157E1A1C04D0B200474796 /* AppDelegate.swift in Sources */,
+				7ED6D42F1C1F5B2B000D4DDB /* CustomMapTableViewCell.swift in Sources */,
+				7ED6D4311C1F5B3C000D4DDB /* CustomTextViewTableViewCell.swift in Sources */,
 				7E1F58F71C0E27E200A01E59 /* RSSParser.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
