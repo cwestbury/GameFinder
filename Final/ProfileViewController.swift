@@ -9,15 +9,12 @@
 import UIKit
 import Parse
 
-class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, UITextFieldDelegate, UINavigationControllerDelegate {
     
     
     //MARK: - Properties
     @IBOutlet var profilePic: UIImageView!
-    @IBOutlet var ratingLabel: UILabel!
-    
     @IBOutlet var NavBarTitle: UINavigationItem!
-    
     @IBOutlet var nameTextField: UITextField!
     @IBOutlet var genderSegControl: UISegmentedControl!
     @IBOutlet var experienceSegControl: UISegmentedControl!
@@ -27,10 +24,17 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
     var experienceSegment = 0
     var currentUser = PFUser.currentUser()
     
+    //MARK: - Text Delegate Methods
+    
+    func textFieldShouldReturn(textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+    
+    
     //MARK: - Save/Querry Server Methods
     
     @IBAction func submitValuesToParse(sender: UIButton){
-        //var objectToSave :PFUser!
         
         if let uCurrentUser = currentUser {
             currentUser = uCurrentUser
@@ -38,11 +42,13 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
             uCurrentUser["Name"] = nameTextField.text
             uCurrentUser["Gender"] = gender
             uCurrentUser["Experience"] = experience
-    
-
+            
+            
             let imageData = UIImageJPEGRepresentation(profilePic.image!, 1.0)
             let imageFile = PFFile(name:"\(nameTextField.text!)ProfilePicture.png", data:imageData!)
-            uCurrentUser["imageName"] = "\(nameTextField.text!)Picture"
+            let Imagename = (nameTextField.text)!.stringByReplacingOccurrencesOfString(" ", withString: "")
+            uCurrentUser["imageName"] = "\(Imagename)Picture"
+            //uCurrentUser["imageName"] = "\(nameTextField.text!)Picture"
             uCurrentUser["imageFile"] = imageFile
             
             uCurrentUser.saveInBackground()
@@ -58,38 +64,39 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
     func getInformationFromServer() {
         if let uCurrentUser = currentUser {
             currentUser = uCurrentUser
+            //print("\(uCurrentUser["Name"] as! String)")
+            NavBarTitle.title = (uCurrentUser["Name"] as! String)
+            nameTextField.text = (uCurrentUser["Name"] as! String)
             
-             NavBarTitle.title! = (uCurrentUser["Name"] as! String)
-           
             
-//            experience = (uCurrentUser["Experience"] as! String)
-//            gender = (uCurrentUser["Gender"] as! String)
-//            print("Got Gender: \(gender) & Experience: \(experience)")
-//            switch gender {
-//                case "Male":
-//                genderSegment = 0
-//                case "Female":
-//                genderSegment = 1
-//                case "Other":
-//                genderSegment = 2
-//            default:
-//                break;
-//            }
-//            switch experience {
-//            case "PickUp":
-//                experienceSegment = 0
-//            case "College":
-//                experienceSegment = 1
-//            case "Club":
-//                experienceSegment = 2
-//            default:
-//                break;
-//            }
-//            
-//            genderSegControl.selectedSegmentIndex = genderSegment
-//            experienceSegControl.selectedSegmentIndex = experienceSegment
+            experience = (uCurrentUser["Experience"] as! String)
+            gender = (uCurrentUser["Gender"] as! String)
+            print("Got Gender: \(gender) & Experience: \(experience)")
+            switch gender {
+            case "Male":
+                genderSegment = 0
+            case "Female":
+                genderSegment = 1
+            case "Other":
+                genderSegment = 2
+            default:
+                break;
+            }
+            switch experience {
+            case "Pick Up":
+                experienceSegment = 0
+            case "College":
+                experienceSegment = 1
+            case "Club":
+                experienceSegment = 2
+            default:
+                break;
+            }
             
-            print("current user name: \(uCurrentUser["username"]as! String)")
+            genderSegControl.selectedSegmentIndex = genderSegment
+            experienceSegControl.selectedSegmentIndex = experienceSegment
+            
+            print("current username: \(uCurrentUser["username"]as! String)")
             
             
             let userImageFile = uCurrentUser["imageFile"] as? PFFile
@@ -106,7 +113,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         } else {
             alertView("Error", message: "Could not contact server")
             print("No Current User")
-
+            
         }
     }
     
@@ -115,7 +122,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         {
         case 0:
             gender = "Male"
-           print("Selected Gender: \(gender) ")
+            print("Selected Gender: \(gender) ")
         case 1:
             gender = "Female"
             print("Selected Gender: \(gender)")
@@ -123,7 +130,7 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
             gender = "Other"
             print("Selected Gender: \(gender)")
         default:
-            break; 
+            break;
         }
         
     }
@@ -131,20 +138,20 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         switch experienceSegControl.selectedSegmentIndex
         {
         case 0:
-            experience = "New"
-            print("Selected Gender: \(experience) ")
+            experience = "Pick Up"
+            print("Selected Exp: \(experience) ")
         case 1:
-            experience = "Intermediate"
-            print("Selected Gender: \(experience) ")
+            experience = "College"
+            print("Selected Exp: \(experience) ")
         case 2:
-            experience = "Experienced"
-            print("Selected Gender: \(experience) ")
+            experience = "Club"
+            print("Selected Exp: \(experience) ")
         default:
             break;
         }
         
     }
-
+    
     //MARK: - Image Methods
     
     
@@ -162,7 +169,6 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         //print("picked Image")
         profilePic.image = image
         self.dismissViewControllerAnimated(true, completion: nil)
-        ratingLabel.hidden = false
         
     }
     
@@ -173,12 +179,11 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
         alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil))
         self.presentViewController(alert, animated: true, completion: nil)
     }
-
+    
     //MARK: - Lifecycle Methods
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        ratingLabel.hidden = true
         getInformationFromServer()
         
         
@@ -191,6 +196,6 @@ class ProfileViewController: UIViewController, UIImagePickerControllerDelegate, 
     }
     
     
-
+    
     
 }

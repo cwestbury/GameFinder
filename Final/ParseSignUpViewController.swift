@@ -9,21 +9,18 @@
 import UIKit
 import Parse
 
-class ParseSignUpViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+class ParseSignUpViewController: UIViewController, UIImagePickerControllerDelegate, UINavigationControllerDelegate, UITextViewDelegate {
     
     @IBOutlet weak var usernameField: UITextField!
     @IBOutlet weak var passwordField: UITextField!
     
     @IBOutlet var profilePic: UIImageView!
-    
-    
-    
     @IBOutlet var nameTextField: UITextField!
     @IBOutlet var genderSegControl: UISegmentedControl!
     @IBOutlet var experienceSegControl: UISegmentedControl!
     
     var gender = "Male"
-    var experience = "PickUp"
+    var experience = "Pick Up"
     
     
     //MARK: - Image Methods
@@ -84,14 +81,10 @@ class ParseSignUpViewController: UIViewController, UIImagePickerControllerDelega
                         try PFUser.logInWithUsername(newUser.username!, password: newUser.password!)
                         print("logged in")
                         self.SaveUserInfoToParse()
-                        let vc : ViewController = self.storyboard!.instantiateViewControllerWithIdentifier("MainView") as! ViewController
-                        let navigationController = UINavigationController(rootViewController: vc)
-                        
-                        self.presentViewController(navigationController, animated: true, completion: nil)
-                        
+                 self.navigationController!.popToRootViewControllerAnimated(true)
                         
                     } catch {
-                        print("Got error signing up")
+                        print("Got error signing in")
                     }
                     
                     
@@ -113,7 +106,8 @@ class ParseSignUpViewController: UIViewController, UIImagePickerControllerDelega
             uCurrentUser["Experience"] = experience
             let imageData = UIImageJPEGRepresentation(profilePic.image!, 1.0)
             let imageFile = PFFile(name:"\(nameTextField.text!)ProfilePicture.png", data:imageData!)
-            uCurrentUser["imageName"] = "\(nameTextField.text!)Picture"
+            let imageName = (nameTextField.text)!.stringByReplacingOccurrencesOfString(" ", withString: "")
+            uCurrentUser["imageName"] = "\(imageName)Picture"
             uCurrentUser["imageFile"] = imageFile
             uCurrentUser.saveInBackground()
             print("saved to parse")
@@ -147,24 +141,28 @@ class ParseSignUpViewController: UIViewController, UIImagePickerControllerDelega
         switch experienceSegControl.selectedSegmentIndex
         {
         case 0:
-            experience = "PickUp"
-            print("Selected Gender: \(experience) ")
+            experience = "Pick Up"
+            print("Selected Experience: \(experience) ")
         case 1:
             experience = "College"
-            print("Selected Gender: \(experience) ")
+            print("Selected Experience: \(experience) ")
         case 2:
             experience = "Club"
-            print("Selected Gender: \(experience) ")
+            print("Selected Experience: \(experience) ")
         default:
             break
         }
         
     }
     
+    //MARK: - Text Delegate Methods
     
+    func textFieldShouldReturn(textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
     
-    
-    
+
     //MARK: - Alert View
     
     func genericAlertView(title:String, message:String) {
@@ -175,6 +173,7 @@ class ParseSignUpViewController: UIViewController, UIImagePickerControllerDelega
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        PFUser.logOut()
         // Do any additional setup after loading the view.
     }
     

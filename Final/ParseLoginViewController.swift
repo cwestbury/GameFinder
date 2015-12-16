@@ -66,6 +66,8 @@ class ParseLoginViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        passwordField.text = "1234"
+        usernameField.text = "cwestbury"
         // Do any additional setup after loading the view.
     }
     
